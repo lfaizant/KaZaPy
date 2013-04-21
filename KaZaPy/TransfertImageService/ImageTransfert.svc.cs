@@ -23,7 +23,7 @@ namespace TransfertImageService
             MemoryStream imageStreamEnMemoire = new MemoryStream();
             image.CopyTo(imageStreamEnMemoire);
             imageBytes = imageStreamEnMemoire.ToArray();
-            String imageID = da.addImage(imageBytes, album);
+            String imageID = da.AddImage(imageBytes, album);
             imageStreamEnMemoire.Close();
             image.Close();
             return imageID;

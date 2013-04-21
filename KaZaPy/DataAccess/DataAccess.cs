@@ -19,7 +19,7 @@ namespace DataAccess
         /// </summary>
         /// <param name="email">user's email</param>
         /// <returns>user's ID</returns>
-        public static string getUserId(string email)
+        public static string GetUserId(string email)
         {
             string userId = null;
 
@@ -68,7 +68,7 @@ namespace DataAccess
         /// <param name="password">user's password</param>
         /// <param name="privilege">admin privilege</param>
         /// <param name="logged">user's log state</param>
-        public static void addUser(string firstName, string lastName, string password, bool privilege = false, bool logged = true)
+        public static void AddUser(string firstName, string lastName, string password, bool privilege = false, bool logged = true)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace DataAccess
         /// Delete an user from the database
         /// </summary>
         /// <param name="userId">user's ID</param>
-        public static void deleteUser(string userId)
+        public static void DeleteUser(string userId)
         {
             // Initialize data reader
             SqlDataReader oReader = null;
@@ -131,7 +131,7 @@ namespace DataAccess
                 // Browse returned albums ID
                 foreach (string s in albumsId)
                     // Delete current album
-                    deleteAlbum(s);
+                    DeleteAlbum(s);
 
                 // Initialize the deletion query
                 oCommand = null;
@@ -150,7 +150,8 @@ namespace DataAccess
             }
             finally
             {
-                // Close the database connection
+                // Close the data reader and the database connection
+                oReader.Close();
                 oConnection.Close();
             }
         }
@@ -162,7 +163,7 @@ namespace DataAccess
         /// </summary>
         /// <param name="name">name of the album</param>
         /// <param name="owner">owner of the album</param>
-        public static void addAlbum(string name, string owner)
+        public static void AddAlbum(string name, string owner)
         {
             try
             {
@@ -195,7 +196,7 @@ namespace DataAccess
         /// Delete an album from the database
         /// </summary>
         /// <param name="albumId">album ID</param>
-        public static void deleteAlbum(string albumId)
+        public static void DeleteAlbum(string albumId)
         {
             try
             {
@@ -236,11 +237,65 @@ namespace DataAccess
 
 #region Image
         /// <summary>
+        /// Get all the images of an album
+        /// </summary>
+        /// <param name="albumId">album ID</param>
+        /// <returns>List of images</returns>
+        public List<byte[]> GetImagesByAlbum(string albumId)
+        {
+            List<byte[]> images = new List<byte[]>();
+
+            // Initialize data reader
+            SqlDataReader oReader = null;
+            try
+            {
+                // Connect to the database
+                oConnection.Open();
+
+                // Initialize the getting query
+                SqlCommand oCommand = new SqlCommand(
+                    "SELECT size, blob" +
+                    "FROM Image" +
+                    "WHERE album = @albumId;", oConnection);
+                oCommand.Parameters.Add("@albumID", System.Data.SqlDbType.UniqueIdentifier, albumId.Length).Value = albumId;
+
+                // Execute the getting query
+                oReader = oCommand.ExecuteReader();
+
+                // Browse returned images
+                while (oReader.Read())
+                {
+                    // Get the size of the current image
+                    int size = oReader.GetInt32(0);
+                    // Get the blob of the current image
+                    byte[] blob = new byte[size];
+                    oReader.GetBytes(1, 0, blob, 0, size);
+                    // Add the current blob to the list
+                    images.Add(blob);
+                }
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the data reader and the database connection
+                oReader.Close();
+                oConnection.Close();
+            }
+
+            // Return the list of images
+            return images;
+        }
+
+        /// <summary>
         /// Store a new image in the database
         /// </summary>
         /// <param name="image">image to store</param>
         /// <param name="album">album of the image</param>
-        public static void addImage(byte[] image, string album)
+        public static void AddImage(byte[] image, string album)
         {
             try
             {
@@ -286,7 +341,7 @@ namespace DataAccess
         /// Delete an image from the database
         /// </summary>
         /// <param name="imageId">image ID</param>
-        public static void deleteImage(string imageId)
+        public static void DeleteImage(string imageId)
         {
             SqlDataReader oReader = null;
             try
