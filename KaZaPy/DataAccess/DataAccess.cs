@@ -23,6 +23,7 @@ namespace DataAccess
         {
             string userId = null;
 
+            // Initialize a data reader
             SqlDataReader oReader = null;
             try
             {
@@ -39,7 +40,7 @@ namespace DataAccess
                 // Execute the getting commande
                 oReader = oCommand.ExecuteReader();
 
-                // Get the return user ID
+                // Get the returned user ID
                 if (oReader.Read())
                     userId = oReader.GetString(0);
             }
@@ -105,18 +106,41 @@ namespace DataAccess
         /// <param name="userId">user's ID</param>
         public static void deleteUser(string userId)
         {
+            // Initialize data reader
+            SqlDataReader oReader = null;
             try
             {
                 // Connect to the database
                 oConnection.Open();
 
-                // Initialize the deletion command
+                // Initialize query for the getting of user's albums ID
                 SqlCommand oCommand = new SqlCommand(
+                    "SELECT id" +
+                    "FROM Album" +
+                    "WHERE owner = @userId;", oConnection);
+                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.UniqueIdentifier, userId.Length).Value = userId;
+
+                // Execute the getting query
+                oReader = oCommand.ExecuteReader();
+
+                // Get user's albums ID
+                List<string> albumsId = new List<string>();
+                while(oReader.Read())
+                    albumsId.Add(oReader.GetString(0));
+
+                // Browse returned albums ID
+                foreach (string s in albumsId)
+                    // Delete current album
+                    deleteAlbum(s);
+
+                // Initialize the deletion query
+                oCommand = null;
+                oCommand = new SqlCommand(
                     "DELETE FROM User" +
                     "WHERE id = @id;", oConnection);
                 oCommand.Parameters.Add("@id", System.Data.SqlDbType.UniqueIdentifier, userId.Length).Value = userId;
 
-                // Execute the deletion command
+                // Execute the deletion query
                 oCommand.ExecuteNonQuery();
             }
             catch (Exception e)
@@ -145,14 +169,14 @@ namespace DataAccess
                 // Connect to the database
                 oConnection.Open();
 
-                // Initialize the addition command
+                // Initialize the addition query
                 SqlCommand oCommand = new SqlCommand(
                     "INSERT INTO Album" +
                     "VALUES(NEWID(), @name, @owner);", oConnection);
                 oCommand.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, name.Length).Value = name;
                 oCommand.Parameters.Add("@owner", System.Data.SqlDbType.UniqueIdentifier, owner.Length).Value = owner;
 
-                // Execute the addtion command
+                // Execute the addtion query
                 oCommand.ExecuteNonQuery();
             }
             catch (Exception e)
@@ -176,15 +200,25 @@ namespace DataAccess
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if(oConnection.State == System.Data.ConnectionState.Closed)
+                    oConnection.Open();
 
-                // Initialize the deletion command
+                // Initialize query for the deletion of images of the album
                 SqlCommand oCommand = new SqlCommand(
+                    "DELETE FROM Image" +
+                    "WHERE album = @albumId;", oConnection);
+                oCommand.Parameters.Add("@albumId", System.Data.SqlDbType.UniqueIdentifier, albumId.Length).Value = albumId;
+
+                // Execute the deletion query
+                oCommand.ExecuteNonQuery();
+
+                // Initialize the deletion query
+                oCommand = new SqlCommand(
                     "DELETE FROM Album" +
                     "WHERE id = @id;", oConnection);
                 oCommand.Parameters.Add("@id", System.Data.SqlDbType.UniqueIdentifier, albumId.Length).Value = albumId;
 
-                // Execute the addtion command
+                // Execute the deletion query
                 oCommand.ExecuteNonQuery();
             }
             catch (Exception e)
