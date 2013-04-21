@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess
 {
@@ -65,10 +62,11 @@ namespace DataAccess
         /// </summary>
         /// <param name="firstName">user's first name</param>
         /// <param name="lastName">user's last name</param>
+        /// <param name="email">user's email</param>
         /// <param name="password">user's password</param>
         /// <param name="privilege">admin privilege</param>
         /// <param name="logged">user's log state</param>
-        public static void AddUser(string firstName, string lastName, string password, bool privilege = false, bool logged = true)
+        public static void AddUser(string firstName, string lastName, string email, string password, bool privilege = false, bool logged = true)
         {
             try
             {
@@ -78,9 +76,10 @@ namespace DataAccess
                 // Initialize the addition command
                 SqlCommand oCommand = new SqlCommand(
                 "INSERT INTO User" +
-                "VALUES(NEWID(), @firstName, @lastName, @password, @privilege, @logged);", oConnection);
+                "VALUES(NEWID(), @firstName, @lastName, @email, @password, @privilege, @logged);", oConnection);
                 oCommand.Parameters.Add("@firstName", System.Data.SqlDbType.NVarChar, firstName.Length).Value = firstName;
                 oCommand.Parameters.Add("@lastName", System.Data.SqlDbType.NVarChar, lastName.Length).Value = lastName;
+                oCommand.Parameters.Add("@email", System.Data.SqlDbType.NVarChar, email.Length).Value = email;
                 oCommand.Parameters.Add("@password", System.Data.SqlDbType.NVarChar, password.Length).Value = password;
                 oCommand.Parameters.Add("@privilege", System.Data.SqlDbType.Bit).Value = privilege;
                 oCommand.Parameters.Add("@logged", System.Data.SqlDbType.Bit).Value = logged;
@@ -155,9 +154,123 @@ namespace DataAccess
                 oConnection.Close();
             }
         }
+
+        /// <summary>
+        /// Log in an user to KaZaPy
+        /// </summary>
+        /// <param name="userId">user's ID</param>
+        public static void LogInUser(string userId)
+        {
+            try
+            {
+                // Connect to the database
+                oConnection.Open();
+
+                // Initialize the addition query
+                SqlCommand oCommand = new SqlCommand(
+                    "UPDATE User" +
+                    "SET logged = 1" +
+                    "WHERE id = @userId;", oConnection);
+                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.UniqueIdentifier, userId.Length).Value = userId;
+
+                // Execute the addtion query
+                oCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the database connection
+                oConnection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Log out an user to KaZaPy
+        /// </summary>
+        /// <param name="userId">user's ID</param>
+        public static void LogOutUser(string userId)
+        {
+            try
+            {
+                // Connect to the database
+                oConnection.Open();
+
+                // Initialize the addition query
+                SqlCommand oCommand = new SqlCommand(
+                    "UPDATE User" +
+                    "SET logged = 0" +
+                    "WHERE id = @userId;", oConnection);
+                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.UniqueIdentifier, userId.Length).Value = userId;
+
+                // Execute the addtion query
+                oCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the database connection
+                oConnection.Close();
+            }
+        }
 #endregion
 
 #region Album
+        /// <summary>
+        /// Get an album ID by its name and its owner
+        /// </summary>
+        /// <param name="name">name of the album</param>
+        /// <param name="owner">owner of the album</param>
+        /// <returns>album ID</returns>
+        public static string GetAlbumId(string name, string owner)
+        {
+            string albumId = null;
+
+            // Initialize a data reader
+            SqlDataReader oReader = null;
+            try
+            {
+                // Connect to the database
+                oConnection.Open();
+
+                // Initialize the getting command
+                SqlCommand oCommand = new SqlCommand(
+                    "SELECT id" +
+                    "FROM Album" +
+                    "WHERE name = @name AND owner = @owner;", oConnection);
+                oCommand.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, name.Length).Value = name;
+                oCommand.Parameters.Add("@owner", System.Data.SqlDbType.UniqueIdentifier, owner.Length).Value = owner;
+
+                // Execute the getting commande
+                oReader = oCommand.ExecuteReader();
+
+                // Get the returned user ID
+                if (oReader.Read())
+                    albumId = oReader.GetString(0);
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the data reader and the database connection
+                oReader.Close();
+                oConnection.Close();
+            }
+
+            // Return the user ID
+            return albumId;
+        }
+
         /// <summary>
         /// Store a new album in the database
         /// </summary>
