@@ -4,11 +4,39 @@ using System.Data.SqlClient;
 
 namespace DataAccess
 {
-    public class DataAccess
+    public class DBAccess
     {
         // Initialize the connection to the database
-        private const string connectionStr = "Server=LOÏC-PC;Database=TestDB;Integrated Security=true;";
+        private const string connectionStr = "Server=LOÏC-PC;Database=KaZaPy_DB;Integrated Security=true;";
         private static SqlConnection oConnection = new SqlConnection(connectionStr);
+
+        public static void ResetTables()
+        {
+            try
+            {
+                // Connect to the database
+                oConnection.Open();
+
+                // Initialize the addition command
+                SqlCommand oCommand = new SqlCommand(
+                    "DELETE FROM Image; " +
+                    "DELETE FROM Album; " +
+                    "DELETE FROM [User];", oConnection);
+
+                // Execute the addition command
+                oCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the database connection
+                oConnection.Close();
+            }
+        }
 
 #region User
         /// <summary>
@@ -16,9 +44,9 @@ namespace DataAccess
         /// </summary>
         /// <param name="email">user's email</param>
         /// <returns>user's ID</returns>
-        public static string GetUserId(string email)
+        public static int GetUserId(string email)
         {
-            string userId = null;
+            int userId = -1;
 
             // Initialize a data reader
             SqlDataReader oReader = null;
@@ -29,8 +57,8 @@ namespace DataAccess
 
                 // Initialize the getting command
                 SqlCommand oCommand = new SqlCommand(
-                    "SELECT id" +
-                    "FROM User" +
+                    "SELECT id " +
+                    "FROM [User] " +
                     "WHERE email = @email;", oConnection);
                 oCommand.Parameters.Add("@email", System.Data.SqlDbType.NVarChar, email.Length).Value = email;
 
@@ -39,7 +67,7 @@ namespace DataAccess
 
                 // Get the returned user ID
                 if (oReader.Read())
-                    userId = oReader.GetString(0);
+                    userId = oReader.GetInt32(0);
             }
             catch (Exception e)
             {
@@ -75,8 +103,8 @@ namespace DataAccess
 
                 // Initialize the addition command
                 SqlCommand oCommand = new SqlCommand(
-                "INSERT INTO User" +
-                "VALUES(NEWID(), @firstName, @lastName, @email, @password, @privilege, @logged);", oConnection);
+                    "INSERT INTO [User] (firstName, lastName, email, password, privilege, logged) " +
+                    "VALUES(@firstName, @lastName, @email, @password, @privilege, @logged)", oConnection);
                 oCommand.Parameters.Add("@firstName", System.Data.SqlDbType.NVarChar, firstName.Length).Value = firstName;
                 oCommand.Parameters.Add("@lastName", System.Data.SqlDbType.NVarChar, lastName.Length).Value = lastName;
                 oCommand.Parameters.Add("@email", System.Data.SqlDbType.NVarChar, email.Length).Value = email;
@@ -103,7 +131,7 @@ namespace DataAccess
         /// Delete an user from the database
         /// </summary>
         /// <param name="userId">user's ID</param>
-        public static void DeleteUser(string userId)
+        public static void DeleteUser(int userId)
         {
             // Initialize data reader
             SqlDataReader oReader = null;
@@ -114,30 +142,33 @@ namespace DataAccess
 
                 // Initialize query for the getting of user's albums ID
                 SqlCommand oCommand = new SqlCommand(
-                    "SELECT id" +
-                    "FROM Album" +
+                    "SELECT id " +
+                    "FROM Album " +
                     "WHERE owner = @userId;", oConnection);
-                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.UniqueIdentifier, userId.Length).Value = userId;
+                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.Int).Value = userId;
 
                 // Execute the getting query
                 oReader = oCommand.ExecuteReader();
 
                 // Get user's albums ID
-                List<string> albumsId = new List<string>();
+                List<int> albumsId = new List<int>();
                 while(oReader.Read())
-                    albumsId.Add(oReader.GetString(0));
+                    albumsId.Add(oReader.GetInt32(0));
+
+                // Close the data reader
+                oReader.Close();
 
                 // Browse returned albums ID
-                foreach (string s in albumsId)
+                foreach (int i in albumsId)
                     // Delete current album
-                    DeleteAlbum(s);
+                    DeleteAlbum(i, true);
 
                 // Initialize the deletion query
                 oCommand = null;
                 oCommand = new SqlCommand(
-                    "DELETE FROM User" +
+                    "DELETE FROM [User] " +
                     "WHERE id = @id;", oConnection);
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.UniqueIdentifier, userId.Length).Value = userId;
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = userId;
 
                 // Execute the deletion query
                 oCommand.ExecuteNonQuery();
@@ -159,7 +190,7 @@ namespace DataAccess
         /// Log in an user to KaZaPy
         /// </summary>
         /// <param name="userId">user's ID</param>
-        public static void LogInUser(string userId)
+        public static void LogInUser(int userId)
         {
             try
             {
@@ -168,10 +199,10 @@ namespace DataAccess
 
                 // Initialize the addition query
                 SqlCommand oCommand = new SqlCommand(
-                    "UPDATE User" +
-                    "SET logged = 1" +
+                    "UPDATE [User] " +
+                    "SET logged = 1 " +
                     "WHERE id = @userId;", oConnection);
-                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.UniqueIdentifier, userId.Length).Value = userId;
+                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.Int).Value = userId;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
@@ -192,7 +223,7 @@ namespace DataAccess
         /// Log out an user to KaZaPy
         /// </summary>
         /// <param name="userId">user's ID</param>
-        public static void LogOutUser(string userId)
+        public static void LogOutUser(int userId)
         {
             try
             {
@@ -201,10 +232,10 @@ namespace DataAccess
 
                 // Initialize the addition query
                 SqlCommand oCommand = new SqlCommand(
-                    "UPDATE User" +
-                    "SET logged = 0" +
+                    "UPDATE [User] " +
+                    "SET logged = 0 " +
                     "WHERE id = @userId;", oConnection);
-                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.UniqueIdentifier, userId.Length).Value = userId;
+                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.Int).Value = userId;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
@@ -229,9 +260,9 @@ namespace DataAccess
         /// <param name="name">name of the album</param>
         /// <param name="owner">owner of the album</param>
         /// <returns>album ID</returns>
-        public static string GetAlbumId(string name, string owner)
+        public static int GetAlbumId(string name, int owner)
         {
-            string albumId = null;
+            int albumId = -1;
 
             // Initialize a data reader
             SqlDataReader oReader = null;
@@ -242,18 +273,18 @@ namespace DataAccess
 
                 // Initialize the getting command
                 SqlCommand oCommand = new SqlCommand(
-                    "SELECT id" +
-                    "FROM Album" +
+                    "SELECT id " +
+                    "FROM Album " +
                     "WHERE name = @name AND owner = @owner;", oConnection);
                 oCommand.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, name.Length).Value = name;
-                oCommand.Parameters.Add("@owner", System.Data.SqlDbType.UniqueIdentifier, owner.Length).Value = owner;
+                oCommand.Parameters.Add("@owner", System.Data.SqlDbType.Int).Value = owner;
 
                 // Execute the getting commande
                 oReader = oCommand.ExecuteReader();
 
                 // Get the returned user ID
                 if (oReader.Read())
-                    albumId = oReader.GetString(0);
+                    albumId = oReader.GetInt32(0);
             }
             catch (Exception e)
             {
@@ -276,7 +307,7 @@ namespace DataAccess
         /// </summary>
         /// <param name="name">name of the album</param>
         /// <param name="owner">owner of the album</param>
-        public static void AddAlbum(string name, string owner)
+        public static void AddAlbum(string name, int owner)
         {
             try
             {
@@ -285,10 +316,10 @@ namespace DataAccess
 
                 // Initialize the addition query
                 SqlCommand oCommand = new SqlCommand(
-                    "INSERT INTO Album" +
-                    "VALUES(NEWID(), @name, @owner);", oConnection);
+                    "INSERT INTO Album (name, owner) " +
+                    "VALUES(@name, @owner);", oConnection);
                 oCommand.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, name.Length).Value = name;
-                oCommand.Parameters.Add("@owner", System.Data.SqlDbType.UniqueIdentifier, owner.Length).Value = owner;
+                oCommand.Parameters.Add("@owner", System.Data.SqlDbType.Int, owner).Value = owner;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
@@ -309,28 +340,28 @@ namespace DataAccess
         /// Delete an album from the database
         /// </summary>
         /// <param name="albumId">album ID</param>
-        public static void DeleteAlbum(string albumId)
+        public static void DeleteAlbum(int albumId, bool alreadyConnected = false)
         {
             try
             {
                 // Connect to the database
-                if(oConnection.State == System.Data.ConnectionState.Closed)
+                if(!alreadyConnected)
                     oConnection.Open();
 
                 // Initialize query for the deletion of images of the album
                 SqlCommand oCommand = new SqlCommand(
-                    "DELETE FROM Image" +
+                    "DELETE FROM Image " +
                     "WHERE album = @albumId;", oConnection);
-                oCommand.Parameters.Add("@albumId", System.Data.SqlDbType.UniqueIdentifier, albumId.Length).Value = albumId;
+                oCommand.Parameters.Add("@albumId", System.Data.SqlDbType.Int).Value = albumId;
 
                 // Execute the deletion query
                 oCommand.ExecuteNonQuery();
 
                 // Initialize the deletion query
                 oCommand = new SqlCommand(
-                    "DELETE FROM Album" +
+                    "DELETE FROM Album " +
                     "WHERE id = @id;", oConnection);
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.UniqueIdentifier, albumId.Length).Value = albumId;
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = albumId;
 
                 // Execute the deletion query
                 oCommand.ExecuteNonQuery();
@@ -343,7 +374,8 @@ namespace DataAccess
             finally
             {
                 // Close the database connection
-                oConnection.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
             }
         }
 #endregion
@@ -354,9 +386,9 @@ namespace DataAccess
         /// </summary>
         /// <param name="albumId">album ID</param>
         /// <returns>List of images</returns>
-        public List<byte[]> GetImagesByAlbum(string albumId)
+        public static Dictionary<int, byte[]> GetImagesByAlbum(int albumId)
         {
-            List<byte[]> images = new List<byte[]>();
+            Dictionary<int, byte[]> images = new Dictionary<int, byte[]>();
 
             // Initialize data reader
             SqlDataReader oReader = null;
@@ -367,10 +399,10 @@ namespace DataAccess
 
                 // Initialize the getting query
                 SqlCommand oCommand = new SqlCommand(
-                    "SELECT size, blob" +
-                    "FROM Image" +
+                    "SELECT id, size, blob " +
+                    "FROM Image " +
                     "WHERE album = @albumId;", oConnection);
-                oCommand.Parameters.Add("@albumID", System.Data.SqlDbType.UniqueIdentifier, albumId.Length).Value = albumId;
+                oCommand.Parameters.Add("@albumID", System.Data.SqlDbType.Int).Value = albumId;
 
                 // Execute the getting query
                 oReader = oCommand.ExecuteReader();
@@ -378,13 +410,15 @@ namespace DataAccess
                 // Browse returned images
                 while (oReader.Read())
                 {
+                    // Get the current image ID
+                    int id = oReader.GetInt32(0);
                     // Get the size of the current image
-                    int size = oReader.GetInt32(0);
+                    int size = oReader.GetInt32(1);
                     // Get the blob of the current image
                     byte[] blob = new byte[size];
-                    oReader.GetBytes(1, 0, blob, 0, size);
+                    oReader.GetBytes(2, 0, blob, 0, size);
                     // Add the current blob to the list
-                    images.Add(blob);
+                    images.Add(id, blob);
                 }
             }
             catch (Exception e)
@@ -408,7 +442,7 @@ namespace DataAccess
         /// </summary>
         /// <param name="image">image to store</param>
         /// <param name="album">album of the image</param>
-        public static void AddImage(byte[] image, string album)
+        public static void AddImage(byte[] image, int album)
         {
             try
             {
@@ -417,11 +451,11 @@ namespace DataAccess
 
                 // Initialize the addtion query
                 SqlCommand oCommand = new SqlCommand(
-                    "INSERT INTO Image" +
-                    "VALUES(NEWID(), @size, @blob, @album)", oConnection);
+                    "INSERT INTO Image (size, blob, album) " +
+                    "VALUES(@size, @blob, @album)", oConnection);
                 oCommand.Parameters.Add("@size", System.Data.SqlDbType.Int).Value = image.Length;
                 oCommand.Parameters.Add("@blob", System.Data.SqlDbType.Image, image.Length).Value = image;
-                oCommand.Parameters.Add("@album", System.Data.SqlDbType.UniqueIdentifier, album.Length).Value = album;
+                oCommand.Parameters.Add("@album", System.Data.SqlDbType.Int).Value = album;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
@@ -429,11 +463,11 @@ namespace DataAccess
                 // Initialize query for update the album
                 oCommand = null;
                 oCommand = new SqlCommand(
-                    "UPDATE Album" +
-                    "SET modificationDate = @modificationDate" +
+                    "UPDATE Album " +
+                    "SET modificationDate = @modificationDate " +
                     "WHERE id = @id;", oConnection);
                 oCommand.Parameters.Add("@modificationDate", System.Data.SqlDbType.Date).Value = DateTime.Now;
-                oCommand.Parameters.Add("@album", System.Data.SqlDbType.UniqueIdentifier, album.Length).Value = album;
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = album;
 
                 // Execute the update query
                 oCommand.ExecuteNonQuery();
@@ -454,7 +488,7 @@ namespace DataAccess
         /// Delete an image from the database
         /// </summary>
         /// <param name="imageId">image ID</param>
-        public static void DeleteImage(string imageId)
+        public static void DeleteImage(int imageId)
         {
             SqlDataReader oReader = null;
             try
@@ -464,25 +498,28 @@ namespace DataAccess
 
                 // Initialize getting query for the ID of the album to update
                 SqlCommand oCommand = new SqlCommand(
-                    "SELECT album" +
-                    "FROM Image" +
+                    "SELECT album " +
+                    "FROM Image " +
                     "WHERE id = @id;", oConnection);
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.UniqueIdentifier).Value = imageId;
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = imageId;
 
                 // Execute the getting command
                 oReader = oCommand.ExecuteReader();
 
                 // Get the album ID
-                string albumId = null;
+                int albumId = -1;
                 if (oReader.Read())
-                    albumId = oReader.GetString(0);
+                    albumId = oReader.GetInt32(0);
+
+                // Close the data reader
+                oReader.Close();
 
                 // Initialize the deletion query
                 oCommand = null;
                 oCommand = new SqlCommand(
-                    "DELETE FROM Image" +
+                    "DELETE FROM Image " +
                     "WHERE id = @id;", oConnection);
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.UniqueIdentifier).Value = imageId;
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = imageId;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
@@ -491,11 +528,11 @@ namespace DataAccess
                 // Initialize query for the update of the modification date of the album
                 oCommand = null;
                 oCommand = new SqlCommand(
-                    "UPDATE Album" +
-                    "SET modificationDate = @modificationDate" +
+                    "UPDATE Album " +
+                    "SET modificationDate = @modificationDate " +
                     "WHERE id = @id;", oConnection);
                 oCommand.Parameters.Add("@modificationDate", System.Data.SqlDbType.Date).Value = DateTime.Now;
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.UniqueIdentifier, albumId.Length).Value = albumId;
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = albumId;
 
                 // Execute the update query
                 oCommand.ExecuteNonQuery();
@@ -507,7 +544,8 @@ namespace DataAccess
             }
             finally
             {
-                // Close the database connection
+                // Close the data reader and the database connection
+                oReader.Close();
                 oConnection.Close();
             }
         }

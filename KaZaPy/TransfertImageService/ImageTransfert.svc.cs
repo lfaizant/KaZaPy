@@ -14,7 +14,7 @@ namespace TransfertImageService
     public class ImageTransfert : IImageTransfert
     {
         //private AccesDonnees accesDonnees = new AccesDonnees();
-        DataAccess.DataAccess da = new DataAccess.DataAccess();
+        DataAccess.DBAccess da = new DataAccess.DBAccess();
 
         public String UploadImage(Stream image, string album)
         {

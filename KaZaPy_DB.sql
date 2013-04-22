@@ -1,7 +1,7 @@
 USE [master]
 GO
 
-/****** Object:  Database [KaZaPy_DB]    Script Date: 04/15/2013 14:51:03 ******/
+/****** Object:  Database [KaZaPy_DB]    Script Date: 04/22/2013 11:56:48 ******/
 IF  EXISTS (SELECT name FROM sys.databases WHERE name = N'KaZaPy_DB')
 DROP DATABASE [KaZaPy_DB]
 GO
@@ -9,7 +9,7 @@ GO
 USE [master]
 GO
 
-/****** Object:  Database [KaZaPy_DB]    Script Date: 04/15/2013 14:51:03 ******/
+/****** Object:  Database [KaZaPy_DB]    Script Date: 04/22/2013 11:56:48 ******/
 CREATE DATABASE [KaZaPy_DB] ON  PRIMARY 
 ( NAME = N'KaZaPy_DB', FILENAME = N'C:\Program Files (x86)\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\KaZaPy_DB.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
  LOG ON 
