@@ -4,6 +4,9 @@ using System.Data.SqlClient;
 
 namespace DataAccess
 {
+    /// <summary>
+    /// Provides all methods needed to access to the database
+    /// </summary>
     public class DBAccess
     {
         // Initialize the connection to the database
