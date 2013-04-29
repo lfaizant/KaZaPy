@@ -108,6 +108,7 @@ namespace WebService
         public List<Image> Images
         {
             get { return images; }
+            set { images = value; }
         }
 
         /// <summary>

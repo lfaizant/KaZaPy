@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using WebService;
 
 namespace DataAccess
 {
@@ -13,7 +14,11 @@ namespace DataAccess
         private const string connectionStr = "Server=LOÏC-PC;Database=KaZaPy_DB;Integrated Security=true;";
         private static SqlConnection oConnection = new SqlConnection(connectionStr);
 
-        public static void ResetTables()
+        /// <summary>
+        /// Reset all the database tables
+        /// </summary>
+        /// <param name="alreadyConnected">database connection status</param>
+        public static void ResetTables(bool alreadyConnected = false)
         {
             try
             {
@@ -43,34 +48,37 @@ namespace DataAccess
 
 #region User
         /// <summary>
-        /// Get an user ID by its email
+        /// Get a KaZaPy user by his unique identifier
         /// </summary>
-        /// <param name="email">user's email</param>
-        /// <returns>user's ID</returns>
-        public static int GetUserId(string email)
+        /// <param name="userId">user's ID</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        /// <returns>KaZaPy user</returns>
+        public static User GetUserById(int userId, bool alreadyConnected = false)
         {
-            int userId = -1;
+            User user = null;
 
             // Initialize a data reader
             SqlDataReader oReader = null;
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if(!alreadyConnected)
+                    oConnection.Open();
 
                 // Initialize the getting command
                 SqlCommand oCommand = new SqlCommand(
-                    "SELECT id " +
+                    "SELECT * " +
                     "FROM [User] " +
-                    "WHERE email = @email;", oConnection);
-                oCommand.Parameters.Add("@email", System.Data.SqlDbType.NVarChar, email.Length).Value = email;
+                    "WHERE id = @userId;", oConnection);
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = userId;
 
                 // Execute the getting commande
                 oReader = oCommand.ExecuteReader();
 
                 // Get the returned user ID
                 if (oReader.Read())
-                    userId = oReader.GetInt32(0);
+                    user = new User(oReader.GetString(1), oReader.GetString(2), oReader.GetString(3), oReader.GetString(4), oReader.GetInt32(0),
+                        oReader.GetBoolean(5), oReader.GetBoolean(6));
             }
             catch (Exception e)
             {
@@ -81,39 +89,87 @@ namespace DataAccess
             {
                 // Close the data reader and the database connection
                 oReader.Close();
-                oConnection.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
             }
 
             // Return the user ID
-            return userId;
+            return user;
         }
 
         /// <summary>
-        /// Store a new user to the database
+        /// Get a KaZaPy user by his email
         /// </summary>
-        /// <param name="firstName">user's first name</param>
-        /// <param name="lastName">user's last name</param>
         /// <param name="email">user's email</param>
-        /// <param name="password">user's password</param>
-        /// <param name="privilege">admin privilege</param>
-        /// <param name="logged">user's log state</param>
-        public static void AddUser(string firstName, string lastName, string email, string password, bool privilege = false, bool logged = true)
+        /// <param name="alreadyConnected">database connection status</param>
+        /// <returns>KaZaPy user</returns>
+        public static User GetUserByEmail(string email, bool alreadyConnected = false)
+        {
+            User user = null;
+
+            // Initialize a data reader
+            SqlDataReader oReader = null;
+            try
+            {
+                // Connect to the database
+                if(!alreadyConnected)
+                    oConnection.Open();
+
+                // Initialize the getting command
+                SqlCommand oCommand = new SqlCommand(
+                    "SELECT * " +
+                    "FROM [User] " +
+                    "WHERE email = @email;", oConnection);
+                oCommand.Parameters.Add("@email", System.Data.SqlDbType.NVarChar, email.Length).Value = email;
+
+                // Execute the getting commande
+                oReader = oCommand.ExecuteReader();
+
+                // Get the returned user
+                if (oReader.Read())
+                    user = new User(oReader.GetString(1), oReader.GetString(2), oReader.GetString(3), oReader.GetString(4), oReader.GetInt32(0),
+                        oReader.GetBoolean(5), oReader.GetBoolean(6));
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the data reader and the database connection
+                oReader.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
+            }
+
+            // Return the user
+            return user;
+        }
+
+        /// <summary>
+        /// Store a new KaZaPy user in the database
+        /// </summary>
+        /// <param name="user">user to add</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        public static void AddUser(User user, bool alreadyConnected = false)
         {
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if(!alreadyConnected)
+                    oConnection.Open();
 
                 // Initialize the addition command
                 SqlCommand oCommand = new SqlCommand(
                     "INSERT INTO [User] (firstName, lastName, email, password, privilege, logged) " +
                     "VALUES(@firstName, @lastName, @email, @password, @privilege, @logged)", oConnection);
-                oCommand.Parameters.Add("@firstName", System.Data.SqlDbType.NVarChar, firstName.Length).Value = firstName;
-                oCommand.Parameters.Add("@lastName", System.Data.SqlDbType.NVarChar, lastName.Length).Value = lastName;
-                oCommand.Parameters.Add("@email", System.Data.SqlDbType.NVarChar, email.Length).Value = email;
-                oCommand.Parameters.Add("@password", System.Data.SqlDbType.NVarChar, password.Length).Value = password;
-                oCommand.Parameters.Add("@privilege", System.Data.SqlDbType.Bit).Value = privilege;
-                oCommand.Parameters.Add("@logged", System.Data.SqlDbType.Bit).Value = logged;
+                oCommand.Parameters.Add("@firstName", System.Data.SqlDbType.NVarChar, user.FirstName.Length).Value = user.FirstName;
+                oCommand.Parameters.Add("@lastName", System.Data.SqlDbType.NVarChar, user.LastName.Length).Value = user.LastName;
+                oCommand.Parameters.Add("@email", System.Data.SqlDbType.NVarChar, user.Email.Length).Value = user.Email;
+                oCommand.Parameters.Add("@password", System.Data.SqlDbType.NVarChar, user.Password.Length).Value = user.Password;
+                oCommand.Parameters.Add("@privilege", System.Data.SqlDbType.Bit).Value = user.Privilege;
+                oCommand.Parameters.Add("@logged", System.Data.SqlDbType.Bit).Value = user.Logged;
 
                 // Execute the addition command
                 oCommand.ExecuteNonQuery();
@@ -126,52 +182,35 @@ namespace DataAccess
             finally
             {
                 // Close the database connection
-                oConnection.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
             }
         }
 
         /// <summary>
-        /// Delete an user from the database
+        /// Delete a KaZaPy user from the database
         /// </summary>
-        /// <param name="userId">user's ID</param>
-        public static void DeleteUser(int userId)
+        /// <param name="user">user to delete</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        public static void DeleteUser(User user, bool alreadyConnected = false)
         {
-            // Initialize data reader
-            SqlDataReader oReader = null;
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if(!alreadyConnected)
+                    oConnection.Open();
 
-                // Initialize query for the getting of user's albums ID
-                SqlCommand oCommand = new SqlCommand(
-                    "SELECT id " +
-                    "FROM Album " +
-                    "WHERE owner = @userId;", oConnection);
-                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.Int).Value = userId;
-
-                // Execute the getting query
-                oReader = oCommand.ExecuteReader();
-
-                // Get user's albums ID
-                List<int> albumsId = new List<int>();
-                while(oReader.Read())
-                    albumsId.Add(oReader.GetInt32(0));
-
-                // Close the data reader
-                oReader.Close();
-
-                // Browse returned albums ID
-                foreach (int i in albumsId)
-                    // Delete current album
-                    DeleteAlbum(i, true);
+                // Get user's albums
+                List<Album> albums = GetAlbumsByUser(user);
+                // Delete user's albums
+                foreach (Album a in albums)
+                    DeleteAlbum(a, true);
 
                 // Initialize the deletion query
-                oCommand = null;
-                oCommand = new SqlCommand(
+                SqlCommand oCommand = new SqlCommand(
                     "DELETE FROM [User] " +
                     "WHERE id = @id;", oConnection);
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = userId;
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = user.Id;
 
                 // Execute the deletion query
                 oCommand.ExecuteNonQuery();
@@ -183,29 +222,31 @@ namespace DataAccess
             }
             finally
             {
-                // Close the data reader and the database connection
-                oReader.Close();
-                oConnection.Close();
+                // Close the database connection
+                if(!alreadyConnected)
+                    oConnection.Close();
             }
         }
 
         /// <summary>
-        /// Log in an user to KaZaPy
+        /// Log an user in KaZaPy
         /// </summary>
-        /// <param name="userId">user's ID</param>
-        public static void LogInUser(int userId)
+        /// <param name="user">user to log in</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        public static void LogInUser(User user, bool alreadyConnected = false)
         {
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if (!alreadyConnected)
+                    oConnection.Open();
 
                 // Initialize the addition query
                 SqlCommand oCommand = new SqlCommand(
                     "UPDATE [User] " +
                     "SET logged = 1 " +
                     "WHERE id = @userId;", oConnection);
-                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.Int).Value = userId;
+                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.Int).Value = user.Id;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
@@ -218,27 +259,30 @@ namespace DataAccess
             finally
             {
                 // Close the database connection
-                oConnection.Close();
+                if (!alreadyConnected)
+                    oConnection.Close();
             }
         }
 
         /// <summary>
-        /// Log out an user to KaZaPy
+        /// Log an user out KaZaPy
         /// </summary>
-        /// <param name="userId">user's ID</param>
-        public static void LogOutUser(int userId)
+        /// <param name="user">user to log out</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        public static void LogOutUser(User user, bool alreadyConnected = false)
         {
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if (!alreadyConnected)
+                    oConnection.Open();
 
                 // Initialize the addition query
                 SqlCommand oCommand = new SqlCommand(
                     "UPDATE [User] " +
                     "SET logged = 0 " +
                     "WHERE id = @userId;", oConnection);
-                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.Int).Value = userId;
+                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.Int).Value = user.Id;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
@@ -251,32 +295,89 @@ namespace DataAccess
             finally
             {
                 // Close the database connection
-                oConnection.Close();
+                if (!alreadyConnected)
+                    oConnection.Close();
             }
         }
 #endregion
 
 #region Album
         /// <summary>
-        /// Get an album ID by its name and its owner
+        /// Get a KaZaPy album by its unique identifier
         /// </summary>
-        /// <param name="name">name of the album</param>
-        /// <param name="owner">owner of the album</param>
-        /// <returns>album ID</returns>
-        public static int GetAlbumId(string name, int owner)
+        /// <param name="albumId">album ID</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        /// <returns>KaZaPy album</returns>
+        public static Album GetAlbumById(int albumId, bool alreadyConnected = false)
         {
-            int albumId = -1;
+            Album album = null;
 
             // Initialize a data reader
             SqlDataReader oReader = null;
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if(!alreadyConnected)
+                    oConnection.Open();
 
                 // Initialize the getting command
                 SqlCommand oCommand = new SqlCommand(
-                    "SELECT id " +
+                    "SELECT * " +
+                    "FROM Album " +
+                    "WHERE id = @albumId;", oConnection);
+                oCommand.Parameters.Add("@albumId", System.Data.SqlDbType.Int).Value = albumId;
+
+                // Execute the getting commande
+                oReader = oCommand.ExecuteReader();
+
+                // Get the returned album
+                if (oReader.Read())
+                    album = new Album(oReader.GetString(1), oReader.GetInt32(2), null,
+                        oReader.GetDateTime(3), oReader.GetDateTime(4), oReader.GetInt32(0));
+
+                // Get images contained in the album
+                album.Images = GetImagesByAlbum(album);
+
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the data reader and the database connection
+                oReader.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
+            }
+
+            // Return the album
+            return album;
+        }
+
+        /// <summary>
+        /// Get a KaZaPy album by its name and its owner
+        /// </summary>
+        /// <param name="name">album name</param>
+        /// <param name="owner">album owner</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        /// <returns>KaZaPy album</returns>
+        public static Album GetAlbumByNameAndOwner(string name, int owner, bool alreadyConnected = false)
+        {
+            Album album = null;
+
+            // Initialize a data reader
+            SqlDataReader oReader = null;
+            try
+            {
+                // Connect to the database
+                if(!alreadyConnected)
+                    oConnection.Open();
+
+                // Initialize the getting command
+                SqlCommand oCommand = new SqlCommand(
+                    "SELECT * " +
                     "FROM Album " +
                     "WHERE name = @name AND owner = @owner;", oConnection);
                 oCommand.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, name.Length).Value = name;
@@ -285,9 +386,14 @@ namespace DataAccess
                 // Execute the getting commande
                 oReader = oCommand.ExecuteReader();
 
-                // Get the returned user ID
+                // Get the returned album
                 if (oReader.Read())
-                    albumId = oReader.GetInt32(0);
+                    album = new Album(oReader.GetString(1), oReader.GetInt32(2), null,
+                        oReader.GetDateTime(3), oReader.GetDateTime(4), oReader.GetInt32(0));
+
+                // Get images contained in the album
+                album.Images = GetImagesByAlbum(album);
+                
             }
             catch (Exception e)
             {
@@ -298,34 +404,91 @@ namespace DataAccess
             {
                 // Close the data reader and the database connection
                 oReader.Close();
-                oConnection.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
             }
 
-            // Return the user ID
-            return albumId;
+            // Return the album
+            return album;
         }
 
         /// <summary>
-        /// Store a new album in the database
+        /// Get KaZaPy albums by their owner
         /// </summary>
-        /// <param name="name">name of the album</param>
-        /// <param name="owner">owner of the album</param>
-        public static void AddAlbum(string name, int owner)
+        /// <param name="user">albums owner</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        /// <returns>User's KaZaPy albums</returns>
+        public static List<Album> GetAlbumsByUser(User user, bool alreadyConnected = false)
+        {
+            List<Album> albums = new List<Album>();
+
+            // Initialize a data reader
+            SqlDataReader oReader = null;
+            try
+            {
+                // Connect to the database
+                if(!alreadyConnected)
+                    oConnection.Open();
+
+                // Initialize the getting command
+                SqlCommand oCommand = new SqlCommand(
+                    "SELECT id " +
+                    "FROM Album " +
+                    "WHERE owner = @userId;", oConnection);
+                oCommand.Parameters.Add("@userId", System.Data.SqlDbType.Int).Value = user.Id;
+
+                // Execute the getting commande
+                oReader = oCommand.ExecuteReader();
+
+                // Get returned albums
+                while (oReader.Read())
+                    albums.Add(GetAlbumById(oReader.GetInt32(0)));
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the data reader and the database connection
+                oReader.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
+            }
+
+            // Return albums
+            return albums;
+        }
+
+        /// <summary>
+        /// Store a new KaZaPy album in the database
+        /// </summary>
+        /// <param name="album">album to store</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        public static void AddAlbum(Album album, bool alreadyConnected = false)
         {
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if(!alreadyConnected)
+                    oConnection.Open();
 
                 // Initialize the addition query
                 SqlCommand oCommand = new SqlCommand(
-                    "INSERT INTO Album (name, owner) " +
-                    "VALUES(@name, @owner);", oConnection);
-                oCommand.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, name.Length).Value = name;
-                oCommand.Parameters.Add("@owner", System.Data.SqlDbType.Int, owner).Value = owner;
+                    "INSERT INTO Album (name, owner, creationDate, modificationDate) " +
+                    "VALUES(@name, @owner, @creationDate, @modificationDate);", oConnection);
+                oCommand.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, album.Name.Length).Value = album.Name;
+                oCommand.Parameters.Add("@owner", System.Data.SqlDbType.Int).Value = album.Owner;
+                oCommand.Parameters.Add("@creationDate", System.Data.SqlDbType.DateTime).Value = album.CreationDate;
+                oCommand.Parameters.Add("@modificationDate", System.Data.SqlDbType.DateTime).Value = album.ModificationDate;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
+
+                // Store images contained in the album into the database
+                foreach (Image i in album.Images)
+                    AddImage(i);
             }
             catch (Exception e)
             {
@@ -335,15 +498,17 @@ namespace DataAccess
             finally
             {
                 // Close the database connection
-                oConnection.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
             }
         }
 
         /// <summary>
-        /// Delete an album from the database
+        /// Delete a KaZaPy album from the database
         /// </summary>
-        /// <param name="albumId">album ID</param>
-        public static void DeleteAlbum(int albumId, bool alreadyConnected = false)
+        /// <param name="album">album to delete</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        public static void DeleteAlbum(Album album, bool alreadyConnected = false)
         {
             try
             {
@@ -351,20 +516,15 @@ namespace DataAccess
                 if(!alreadyConnected)
                     oConnection.Open();
 
-                // Initialize query for the deletion of images of the album
-                SqlCommand oCommand = new SqlCommand(
-                    "DELETE FROM Image " +
-                    "WHERE album = @albumId;", oConnection);
-                oCommand.Parameters.Add("@albumId", System.Data.SqlDbType.Int).Value = albumId;
-
-                // Execute the deletion query
-                oCommand.ExecuteNonQuery();
+                // Delete images contained in the album
+                foreach (Image i in album.Images)
+                    DeleteImage(i);
 
                 // Initialize the deletion query
-                oCommand = new SqlCommand(
+                SqlCommand oCommand = new SqlCommand(
                     "DELETE FROM Album " +
                     "WHERE id = @id;", oConnection);
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = albumId;
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = album.Id;
 
                 // Execute the deletion query
                 oCommand.ExecuteNonQuery();
@@ -385,27 +545,29 @@ namespace DataAccess
 
 #region Image
         /// <summary>
-        /// Get all the images of an album
+        /// Get all images of a KaZaPy album
         /// </summary>
-        /// <param name="albumId">album ID</param>
-        /// <returns>List of images</returns>
-        public static Dictionary<int, byte[]> GetImagesByAlbum(int albumId)
+        /// <param name="album">album that contains images</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        /// <returns>images contained in the album</returns>
+        public static List<Image> GetImagesByAlbum(Album album, bool alreadyConnected = false)
         {
-            Dictionary<int, byte[]> images = new Dictionary<int, byte[]>();
+            List<Image> images = new List<Image>();
 
             // Initialize data reader
             SqlDataReader oReader = null;
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if(!alreadyConnected)
+                    oConnection.Open();
 
                 // Initialize the getting query
                 SqlCommand oCommand = new SqlCommand(
                     "SELECT id, size, blob " +
                     "FROM Image " +
                     "WHERE album = @albumId;", oConnection);
-                oCommand.Parameters.Add("@albumID", System.Data.SqlDbType.Int).Value = albumId;
+                oCommand.Parameters.Add("@albumID", System.Data.SqlDbType.Int).Value = album.Id;
 
                 // Execute the getting query
                 oReader = oCommand.ExecuteReader();
@@ -421,7 +583,7 @@ namespace DataAccess
                     byte[] blob = new byte[size];
                     oReader.GetBytes(2, 0, blob, 0, size);
                     // Add the current blob to the list
-                    images.Add(id, blob);
+                    images.Add(new Image(blob, album.Id, id));
                 }
             }
             catch (Exception e)
@@ -433,7 +595,8 @@ namespace DataAccess
             {
                 // Close the data reader and the database connection
                 oReader.Close();
-                oConnection.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
             }
 
             // Return the list of images
@@ -441,24 +604,25 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Store a new image in the database
+        /// Store a new KaZaPy image into the database
         /// </summary>
         /// <param name="image">image to store</param>
-        /// <param name="album">album of the image</param>
-        public static void AddImage(byte[] image, int album)
+        /// <param name="alreadyConnected">database connection status</param>
+        public static void AddImage(Image image, bool alreadyConnected = false)
         {
             try
             {
                 // Connect to the database
-                oConnection.Open();
+                if(!alreadyConnected)
+                    oConnection.Open();
 
                 // Initialize the addtion query
                 SqlCommand oCommand = new SqlCommand(
                     "INSERT INTO Image (size, blob, album) " +
                     "VALUES(@size, @blob, @album)", oConnection);
-                oCommand.Parameters.Add("@size", System.Data.SqlDbType.Int).Value = image.Length;
-                oCommand.Parameters.Add("@blob", System.Data.SqlDbType.Image, image.Length).Value = image;
-                oCommand.Parameters.Add("@album", System.Data.SqlDbType.Int).Value = album;
+                oCommand.Parameters.Add("@size", System.Data.SqlDbType.Int).Value = image.Blob.Length;
+                oCommand.Parameters.Add("@blob", System.Data.SqlDbType.Image, image.Blob.Length).Value = image.Blob;
+                oCommand.Parameters.Add("@album", System.Data.SqlDbType.Int).Value = image.Album;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
@@ -468,9 +632,9 @@ namespace DataAccess
                 oCommand = new SqlCommand(
                     "UPDATE Album " +
                     "SET modificationDate = @modificationDate " +
-                    "WHERE id = @id;", oConnection);
-                oCommand.Parameters.Add("@modificationDate", System.Data.SqlDbType.Date).Value = DateTime.Now;
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = album;
+                    "WHERE id = @albumId;", oConnection);
+                oCommand.Parameters.Add("@modificationDate", System.Data.SqlDbType.DateTime).Value = DateTime.Now;
+                oCommand.Parameters.Add("@albumId", System.Data.SqlDbType.Int).Value = image.Album;
 
                 // Execute the update query
                 oCommand.ExecuteNonQuery();
@@ -483,7 +647,8 @@ namespace DataAccess
             finally
             {
                 // Close the database connection
-                oConnection.Close();
+                if(!alreadyConnected)
+                    oConnection.Close();
             }
         }
 
@@ -491,51 +656,33 @@ namespace DataAccess
         /// Delete an image from the database
         /// </summary>
         /// <param name="imageId">image ID</param>
-        public static void DeleteImage(int imageId)
+        /// <param name="alreadyConnected">database connection status</param>
+        public static void DeleteImage(Image image, bool alreadyConnected = false)
         {
-            SqlDataReader oReader = null;
             try
             {
                 // Connect to the database
-                oConnection.Open();
-
-                // Initialize getting query for the ID of the album to update
-                SqlCommand oCommand = new SqlCommand(
-                    "SELECT album " +
-                    "FROM Image " +
-                    "WHERE id = @id;", oConnection);
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = imageId;
-
-                // Execute the getting command
-                oReader = oCommand.ExecuteReader();
-
-                // Get the album ID
-                int albumId = -1;
-                if (oReader.Read())
-                    albumId = oReader.GetInt32(0);
-
-                // Close the data reader
-                oReader.Close();
+                if(!alreadyConnected)
+                    oConnection.Open();
 
                 // Initialize the deletion query
-                oCommand = null;
+                SqlCommand oCommand = null;
                 oCommand = new SqlCommand(
                     "DELETE FROM Image " +
                     "WHERE id = @id;", oConnection);
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = imageId;
+                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = image.Id;
 
                 // Execute the addtion query
                 oCommand.ExecuteNonQuery();
                 
-
                 // Initialize query for the update of the modification date of the album
                 oCommand = null;
                 oCommand = new SqlCommand(
                     "UPDATE Album " +
                     "SET modificationDate = @modificationDate " +
-                    "WHERE id = @id;", oConnection);
+                    "WHERE id = @albumId;", oConnection);
                 oCommand.Parameters.Add("@modificationDate", System.Data.SqlDbType.Date).Value = DateTime.Now;
-                oCommand.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = albumId;
+                oCommand.Parameters.Add("@albumId", System.Data.SqlDbType.Int).Value = image.Album;
 
                 // Execute the update query
                 oCommand.ExecuteNonQuery();
@@ -547,9 +694,9 @@ namespace DataAccess
             }
             finally
             {
-                // Close the data reader and the database connection
-                oReader.Close();
-                oConnection.Close();
+                // Close the database connection
+                if(!alreadyConnected)
+                    oConnection.Close();
             }
         }
 #endregion
