@@ -47,7 +47,7 @@ namespace WebService
         public Album(string name, int owner, int id = 0)
         {
             // Set album attributes
-            this.id = 0;
+            this.id = id;
             this.name = name;
             this.owner = owner;
             this.images = new List<Image>();
@@ -67,7 +67,7 @@ namespace WebService
         public Album(string name, int owner, List<Image> images, DateTime creationDate, DateTime modificationDate, int id = 0)
         {
             // Set album attributes
-            this.id = 0;
+            this.id = id;
             this.name = name;
             this.owner = owner;
             this.images = images;

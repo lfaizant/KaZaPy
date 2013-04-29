@@ -201,7 +201,7 @@ namespace DataAccess
                     oConnection.Open();
 
                 // Get user's albums
-                List<Album> albums = GetAlbumsByUser(user);
+                List<Album> albums = GetAlbumsByUser(user, true);
                 // Delete user's albums
                 foreach (Album a in albums)
                     DeleteAlbum(a, true);
@@ -335,8 +335,11 @@ namespace DataAccess
                     album = new Album(oReader.GetString(1), oReader.GetInt32(2), null,
                         oReader.GetDateTime(3), oReader.GetDateTime(4), oReader.GetInt32(0));
 
+                // Close the data reader
+                oReader.Close();
+
                 // Get images contained in the album
-                album.Images = GetImagesByAlbum(album);
+                album.Images = GetImagesByAlbum(album, true);
 
             }
             catch (Exception e)
@@ -391,8 +394,11 @@ namespace DataAccess
                     album = new Album(oReader.GetString(1), oReader.GetInt32(2), null,
                         oReader.GetDateTime(3), oReader.GetDateTime(4), oReader.GetInt32(0));
 
+                // Close the data reader
+                oReader.Close();
+
                 // Get images contained in the album
-                album.Images = GetImagesByAlbum(album);
+                album.Images = GetImagesByAlbum(album, true);
                 
             }
             catch (Exception e)
@@ -440,9 +446,17 @@ namespace DataAccess
                 // Execute the getting commande
                 oReader = oCommand.ExecuteReader();
 
-                // Get returned albums
+                // Get returned albums ID
+                List<int> albumsId = new List<int>();
                 while (oReader.Read())
-                    albums.Add(GetAlbumById(oReader.GetInt32(0)));
+                    albumsId.Add(oReader.GetInt32(0));
+
+                // Close the data reader
+                oReader.Close();
+
+                // Get user's albums
+                foreach (int i in albumsId)
+                    albums.Add(GetAlbumById(i, true));
             }
             catch (Exception e)
             {
@@ -488,7 +502,7 @@ namespace DataAccess
 
                 // Store images contained in the album into the database
                 foreach (Image i in album.Images)
-                    AddImage(i);
+                    AddImage(i, true);
             }
             catch (Exception e)
             {
@@ -518,7 +532,7 @@ namespace DataAccess
 
                 // Delete images contained in the album
                 foreach (Image i in album.Images)
-                    DeleteImage(i);
+                    DeleteImage(i, true);
 
                 // Initialize the deletion query
                 SqlCommand oCommand = new SqlCommand(
