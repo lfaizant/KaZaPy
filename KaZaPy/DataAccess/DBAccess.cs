@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using WebService;
+using ObjectClass;
 
 namespace DataAccess
 {
@@ -558,6 +558,67 @@ namespace DataAccess
 #endregion
 
 #region Image
+        /// <summary>
+        /// Get a KaZaPy image by its unique identifier
+        /// </summary>
+        /// <param name="imageId">image ID</param>
+        /// <param name="alreadyConnected">database connection status</param>
+        /// <returns>KaZaPy image</returns>
+        public static Image GetImageById(int imageId, bool alreadyConnected = false)
+        {
+            Image image = null;
+
+            // Initialize a data reader
+            SqlDataReader oReader = null;
+            try
+            {
+                // Connect to the database
+                if (!alreadyConnected)
+                    oConnection.Open();
+
+                // Initialize the getting command
+                SqlCommand oCommand = new SqlCommand(
+                    "SELECT * " +
+                    "FROM Image " +
+                    "WHERE id = @imageId;", oConnection);
+                oCommand.Parameters.Add("@imageId", System.Data.SqlDbType.Int).Value = imageId;
+
+                // Execute the getting commande
+                oReader = oCommand.ExecuteReader();
+
+                // Get the returned user ID
+                if (oReader.Read())
+                {
+                    // Get the image ID
+                    int id = oReader.GetInt32(0);
+                    // Get the size of the current image
+                    int size = oReader.GetInt32(1);
+                    // Get the blob of the current image
+                    byte[] blob = new byte[size];
+                    oReader.GetBytes(2, 0, blob, 0, size);
+                    // Get the album that contained the image
+                    int album = oReader.GetInt32(3);
+
+                    // Construct the image
+                    image = new Image(blob, album, id);
+                }
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the data reader and the database connection
+                oReader.Close();
+                if (!alreadyConnected)
+                    oConnection.Close();
+            }
+
+            // Return the user ID
+            return image;
+        }
         /// <summary>
         /// Get all images of a KaZaPy album
         /// </summary>

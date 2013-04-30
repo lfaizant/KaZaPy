@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess;
-using WebService;
+using ObjectClass;
 
 namespace TestKaZaPy
 {
-    class Program
+    class Test
     {
         private static void TestDBAccess()
         {
@@ -33,9 +34,38 @@ namespace TestKaZaPy
             Console.ReadKey();
         }
 
+        private static void TestProcessingService()
+        {
+            DBAccess.ResetTables();
+
+            DBAccess.AddUser(new User("Suzy", "Paeta", "suzy.paeta@gmail.com", "azerty"));
+            DBAccess.AddAlbum(new Album("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
+            Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
+
+            MemoryStream imageMemoryStream = new MemoryStream(readImage(@"c:\image.jpg"));
+            ProcessingService.ProcessingServiceClient psc = new ProcessingService.ProcessingServiceClient();
+            ProcessingService.ImageInfo imageInfo = new ProcessingService.ImageInfo();
+            imageInfo.Album = album.Id;
+            psc.Upload(imageInfo, imageMemoryStream);
+
+            Console.ReadKey();
+        }
+
+        private static byte[] readImage(string path)
+        {
+            byte[] blob = null;
+            FileInfo fileInfo = new FileInfo(path);
+            int nbBytes = (int)fileInfo.Length;
+            FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            BinaryReader br = new BinaryReader(fileStream);
+            blob = br.ReadBytes(nbBytes);
+            return blob;
+        }
+
         public static void Main(string[] args)
         {
-            TestDBAccess();
+            // TestDBAccess();
+            TestProcessingService();
         }
     }
 }

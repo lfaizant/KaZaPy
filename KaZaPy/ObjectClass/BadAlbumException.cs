@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebService
+namespace ObjectClass
 {
     /// <summary>
     /// Exception thrown when an image is added to a bad album

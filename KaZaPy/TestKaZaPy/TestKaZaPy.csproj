@@ -34,6 +34,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,21 +43,66 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Service References\ProcessingService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Service References\ProcessingService\ProcessingService.wsdl" />
+    <None Include="Service References\ProcessingService\ProcessingService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProcessingService\ProcessingService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProcessingService\ProcessingService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProcessingService\ProcessingService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProcessingService\TestKaZaPy.ProcessingService.ImageDownloadResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ProcessingService\TestKaZaPy.ProcessingService.UploadResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
       <Project>{195d882d-90aa-4310-b96e-5dcc05945b14}</Project>
       <Name>DataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WebService\WebService.csproj">
-      <Project>{649b50f4-65d2-45a7-93c4-38c11a2e6fe1}</Project>
-      <Name>WebService</Name>
+    <ProjectReference Include="..\ObjectClass\ObjectClass.csproj">
+      <Project>{9619d404-dfc0-4f1e-b599-d7b3f39b7b32}</Project>
+      <Name>ObjectClass</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ProcessingService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ProcessingService\ProcessingService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ProcessingService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ProcessingService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ProcessingService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
