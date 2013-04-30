@@ -8,13 +8,17 @@ namespace AdminInterface
 {
     class AdminConsole
     {
+        
         static void Main(string[] args)
         {
-            Remote remote = new Remote();
+            Command c = new Command();
+            bool notExit = true;
 
-            string command = Console.ReadLine();
-
-            remote.invoke(command);
+            while (notExit)
+            {
+                string command = Console.ReadLine();
+                c.execute(command);
+            }
 
             Console.ReadKey();
 
