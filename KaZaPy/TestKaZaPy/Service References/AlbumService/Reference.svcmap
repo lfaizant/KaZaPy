@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="92ad8c8a-de93-4461-ae0b-53fde6c0aa33" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:5669/AlbumService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="AlbumService.xsd" MetadataType="Schema" ID="1e2e9a52-0efe-4c14-9a1b-a4852a6e34eb" SourceId="1" SourceUrl="http://localhost:5669/AlbumService.svc?xsd=xsd2" />
+    <MetadataFile FileName="AlbumService.wsdl" MetadataType="Wsdl" ID="53db5c49-5b79-4129-96d9-58649cf84116" SourceId="1" SourceUrl="http://localhost:5669/AlbumService.svc?wsdl" />
+    <MetadataFile FileName="AlbumService1.xsd" MetadataType="Schema" ID="11210428-fa3e-4815-a2ff-96c88ff91007" SourceId="1" SourceUrl="http://localhost:5669/AlbumService.svc?xsd=xsd0" />
+    <MetadataFile FileName="AlbumService.disco" MetadataType="Disco" ID="95ac3c22-eae9-4d02-9232-0b46255f01de" SourceId="1" SourceUrl="http://localhost:5669/AlbumService.svc?disco" />
+    <MetadataFile FileName="AlbumService2.xsd" MetadataType="Schema" ID="cbce86e5-4997-4f23-9436-77f7217f7fbb" SourceId="1" SourceUrl="http://localhost:5669/AlbumService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

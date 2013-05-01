@@ -476,6 +476,60 @@ namespace DataAccess
         }
 
         /// <summary>
+        /// Get all KaZaPy albums stored in the database
+        /// </summary>
+        /// <param name="alreadyConnected">database connection status</param>
+        /// <returns>KaZaPy albums</returns>
+        public static List<Album> GetAllAlbums(bool alreadyConnected = false)
+        {
+            List<Album> albums = new List<Album>();
+
+            // Initialize a data reader
+            SqlDataReader oReader = null;
+            try
+            {
+                // Connect to the database
+                if (!alreadyConnected)
+                    oConnection.Open();
+
+                // Initialize the getting command
+                SqlCommand oCommand = new SqlCommand(
+                    "SELECT id " +
+                    "FROM Album;", oConnection);
+
+                // Execute the getting commande
+                oReader = oCommand.ExecuteReader();
+
+                // Get returned albums ID
+                List<int> albumsId = new List<int>();
+                while (oReader.Read())
+                    albumsId.Add(oReader.GetInt32(0));
+
+                // Close the data reader
+                oReader.Close();
+
+                // Get user's albums
+                foreach (int i in albumsId)
+                    albums.Add(GetAlbumById(i, true));
+            }
+            catch (Exception e)
+            {
+                // Print the error message
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+            finally
+            {
+                // Close the data reader and the database connection
+                oReader.Close();
+                if (!alreadyConnected)
+                    oConnection.Close();
+            }
+
+            // Return albums
+            return albums;
+        }
+
+        /// <summary>
         /// Store a new KaZaPy album in the database
         /// </summary>
         /// <param name="album">album to store</param>
@@ -728,9 +782,9 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Delete an image from the database
+        /// Delete a KaZaPy image from the database
         /// </summary>
-        /// <param name="imageId">image ID</param>
+        /// <param name="imageId">image to delete</param>
         /// <param name="alreadyConnected">database connection status</param>
         public static void DeleteImage(Image image, bool alreadyConnected = false)
         {

@@ -8,6 +8,7 @@ namespace ObjectClass
     /// <summary>
     /// A KaZaPy image
     /// </summary>
+    [Serializable()]
     public class Image
     {
 #region Attributes

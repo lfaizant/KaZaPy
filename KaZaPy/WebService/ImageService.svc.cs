@@ -10,8 +10,15 @@ using DataAccess;
 
 namespace WebService
 {
+    /// <summary>
+    /// Provides all services needed to process KaZaPy images
+    /// </summary>
     public class ImageService : IImageService
     {
+        /// <summary>
+        /// Store a new KaZaPy image into the database
+        /// </summary>
+        /// <param name="data">image to store</param>
         public void AddImage(ImageUploadRequest data)
         {
             byte[] blob = null;
@@ -22,6 +29,11 @@ namespace WebService
             imageMemoryStream.Close();
         }
 
+        /// <summary>
+        /// Get a KaZaPy image by its unique identifier
+        /// </summary>
+        /// <param name="data">image ID</param>
+        /// <returns>KaZaPy image</returns>
         public ImageDownloadResponse GetImage(ImageDownloadRequest data)
         {
             byte[] blob = DBAccess.GetImageById(data.ImageInfo.Id).Blob;
@@ -31,6 +43,10 @@ namespace WebService
             return idr;
         }
 
+        /// <summary>
+        /// Delete a KaZaPy image from the database
+        /// </summary>
+        /// <param name="data">image to delete</param>
         public void DeleteImage(ImageDeleteRequest data)
         {
             Image image = DBAccess.GetImageById(data.ImageInfo.Id);

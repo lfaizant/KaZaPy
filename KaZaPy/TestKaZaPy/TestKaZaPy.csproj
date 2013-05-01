@@ -43,6 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service References\AlbumService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\ImageService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -58,7 +63,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Properties\DataSources\ObjectClass.Album.datasource" />
     <None Include="Properties\DataSources\ObjectClass.User.datasource" />
+    <None Include="Service References\AlbumService\AlbumService.wsdl" />
+    <None Include="Service References\AlbumService\AlbumService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AlbumService\AlbumService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AlbumService\AlbumService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ImageService\ImageService.wsdl" />
     <None Include="Service References\ImageService\ImageService.xsd">
       <SubType>Designer</SubType>
@@ -106,6 +122,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\AlbumService\" />
     <WCFMetadataStorage Include="Service References\ImageService\" />
     <WCFMetadataStorage Include="Service References\UserService\" />
   </ItemGroup>
@@ -135,6 +152,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\ImageService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\AlbumService\AlbumService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\AlbumService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\AlbumService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\AlbumService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

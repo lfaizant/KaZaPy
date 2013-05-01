@@ -11,21 +11,27 @@ namespace TestKaZaPy
 {
     class Test
     {
-        private static void TestDBAccess()
+        private static void TestDataAccess()
         {
             Console.WriteLine("--- TEST : DBAccess ---\n");
 
             DBAccess.ResetTables();
 
             DBAccess.AddUser(new User("Suzy", "Paeta", "suzy.paeta@gmail.com", "azerty"));
+
             DBAccess.AddAlbum(new Album("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
-            Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
-            DBAccess.AddImage(new Image(new byte[512], album.Id));
-            DBAccess.AddImage(new Image(new byte[1024], DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id).Id));
-            List<Image> images = DBAccess.GetImagesByAlbum(DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
-            DBAccess.DeleteImage(images.ElementAt(0));
-            DBAccess.DeleteAlbum(DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
             DBAccess.AddAlbum(new Album("Party", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
+            Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
+
+            DBAccess.AddImage(new Image(new byte[512], album.Id));
+            DBAccess.AddImage(new Image(new byte[1024], album.Id));
+            List<Image> images = DBAccess.GetImagesByAlbum(album);
+            DBAccess.DeleteImage(images.ElementAt(0));
+
+            List<Album> userAlbums = DBAccess.GetAlbumsByUser(DBAccess.GetUserByEmail("suzy.paeta@gmail.com"));
+            List<Album> albums = DBAccess.GetAllAlbums();
+            DBAccess.DeleteAlbum(albums.ElementAt(0));
+
             DBAccess.LogOutUser(DBAccess.GetUserByEmail("suzy.paeta@gmail.com"));
             DBAccess.LogInUser(DBAccess.GetUserByEmail("suzy.paeta@gmail.com"));
             DBAccess.DeleteUser(DBAccess.GetUserByEmail("suzy.paeta@gmail.com"));
@@ -45,7 +51,30 @@ namespace TestKaZaPy
             usc.LogOutUser(usc.GetUserByEmail("suzy.paeta@gmail.com"));
             usc.LogInUser(usc.GetUserByEmail("suzy.paeta@gmail.com"));
             usc.DeleteUser(usc.GetUserByEmail("suzy.paeta@gmail.com"));
+            usc.Close();
 
+            Console.WriteLine("--- END OF TEST ---");
+            Console.ReadKey();
+        }
+
+        private static void TestAlbumService()
+        {
+            Console.WriteLine("--- TEST : AlbumService ---\n");
+
+            DBAccess.ResetTables();
+            DBAccess.AddUser(new User("Suzy", "Paeta", "suzy.paeta@gmail.com", "azerty"));
+
+            AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
+            asc.AddAlbum(new Album("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
+            asc.AddAlbum(new Album("Party", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
+            asc.AddAlbum(new Album("Street Art", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
+
+            Album album = asc.GetAlbumById(asc.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id).Id);
+            asc.DeleteAlbum(album);
+            Album[] userAlbums = asc.GetAlbumsByUser(DBAccess.GetUserByEmail("suzy.paeta@gmail.com"));
+            asc.DeleteAlbum(userAlbums[0]);
+            Album[] albums = asc.GetAllAlbums();
+            asc.DeleteAlbum(albums[0]);
 
             Console.WriteLine("--- END OF TEST ---");
             Console.ReadKey();
@@ -73,6 +102,8 @@ namespace TestKaZaPy
 
             isc.DeleteImage(imageInfo);*/
 
+            isc.Close();
+
             Console.WriteLine("--- END OF TEST ---");
             Console.ReadKey();
         }
@@ -90,9 +121,10 @@ namespace TestKaZaPy
 
         public static void Main(string[] args)
         {
-            // TestDBAccess();
+            TestDataAccess();
             // TestImageService();
-            TestUserService();
+            // TestUserService();
+            // TestAlbumService();
         }
     }
 }
