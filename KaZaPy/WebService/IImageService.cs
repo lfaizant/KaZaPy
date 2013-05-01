@@ -9,13 +9,16 @@ using System.Text;
 namespace WebService
 {
     [ServiceContract]
-    public interface IProcessingService
+    public interface IImageService
     {
         [OperationContract]
-        void Upload(ImageUploadRequest data);
+        void AddImage(ImageUploadRequest data);
 
         [OperationContract]
-        ImageDownloadResponse Download(ImageDownloadRequest data);
+        ImageDownloadResponse GetImage(ImageDownloadRequest data);
+
+        [OperationContract]
+        void DeleteImage(ImageDeleteRequest data);
     }
 
     [MessageContract]
@@ -37,6 +40,13 @@ namespace WebService
 
     [MessageContract]
     public class ImageDownloadRequest
+    {
+        [MessageBodyMember(Order = 1)]
+        public ImageInfo ImageInfo;
+    }
+
+    [MessageContract]
+    public class ImageDeleteRequest
     {
         [MessageBodyMember(Order = 1)]
         public ImageInfo ImageInfo;

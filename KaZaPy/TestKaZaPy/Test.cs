@@ -34,8 +34,27 @@ namespace TestKaZaPy
             Console.ReadKey();
         }
 
-        private static void TestProcessingService()
+        private static void TestUserService()
         {
+            Console.WriteLine("--- TEST : UserService ---\n");
+
+            DBAccess.ResetTables();
+
+            UserService.UserServiceClient usc = new UserService.UserServiceClient();
+            usc.AddUser(new User("Suzy", "Paeta", "suzy.paeta@gmail.com", "azerty"));
+            usc.LogOutUser(usc.GetUserByEmail("suzy.paeta@gmail.com"));
+            usc.LogInUser(usc.GetUserByEmail("suzy.paeta@gmail.com"));
+            usc.DeleteUser(usc.GetUserByEmail("suzy.paeta@gmail.com"));
+
+
+            Console.WriteLine("--- END OF TEST ---");
+            Console.ReadKey();
+        }
+
+        private static void TestImageService()
+        {
+            Console.WriteLine("--- TEST : ImageService ---\n");
+
             DBAccess.ResetTables();
 
             DBAccess.AddUser(new User("Suzy", "Paeta", "suzy.paeta@gmail.com", "azerty"));
@@ -43,11 +62,18 @@ namespace TestKaZaPy
             Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
 
             MemoryStream imageMemoryStream = new MemoryStream(readImage(@"c:\image.jpg"));
-            ProcessingService.ProcessingServiceClient psc = new ProcessingService.ProcessingServiceClient();
-            ProcessingService.ImageInfo imageInfo = new ProcessingService.ImageInfo();
+            ImageService.ImageServiceClient isc = new ImageService.ImageServiceClient();
+            ImageService.ImageInfo imageInfo = new ImageService.ImageInfo();
             imageInfo.Album = album.Id;
-            psc.Upload(imageInfo, imageMemoryStream);
+            isc.AddImage(imageInfo, imageMemoryStream);
 
+            /*Image image = DBAccess.GetImagesByAlbum(album).ElementAt(0);
+            imageInfo.Id = image.Id;
+            Stream imageStream = isc.GetImage(imageInfo);
+
+            isc.DeleteImage(imageInfo);*/
+
+            Console.WriteLine("--- END OF TEST ---");
             Console.ReadKey();
         }
 
@@ -65,7 +91,8 @@ namespace TestKaZaPy
         public static void Main(string[] args)
         {
             // TestDBAccess();
-            TestProcessingService();
+            // TestImageService();
+            TestUserService();
         }
     }
 }

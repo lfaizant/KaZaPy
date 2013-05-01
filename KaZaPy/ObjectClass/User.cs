@@ -8,6 +8,7 @@ namespace ObjectClass
     /// <summary>
     /// A KaZaPy user, admin or not
     /// </summary>
+    [Serializable()]
     public class User
     {
 #region Attributes

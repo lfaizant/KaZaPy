@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ProcessingService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsp:Policy wsu:Id="WSHttpBinding_IProcessingService_policy">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ImageService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="WSHttpBinding_IImageService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SymmetricBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -97,7 +97,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSHttpBinding_IProcessingService_Upload_Input_policy">
+  <wsp:Policy wsu:Id="WSHttpBinding_IImageService_AddImage_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -118,7 +118,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSHttpBinding_IProcessingService_Upload_output_policy">
+  <wsp:Policy wsu:Id="WSHttpBinding_IImageService_AddImage_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -137,7 +137,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSHttpBinding_IProcessingService_Download_Input_policy">
+  <wsp:Policy wsu:Id="WSHttpBinding_IImageService_GetImage_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -156,7 +156,45 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSHttpBinding_IProcessingService_Download_output_policy">
+  <wsp:Policy wsu:Id="WSHttpBinding_IImageService_GetImage_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IImageService_DeleteImage_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IImageService_DeleteImage_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -177,10 +215,10 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:5669/ProcessingService.svc?xsd=xsd1" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:5669/ProcessingService.svc?xsd=xsd0" namespace="http://schemas.microsoft.com/Message" />
-      <xsd:import schemaLocation="http://localhost:5669/ProcessingService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:5669/ProcessingService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WebService" />
+      <xsd:import schemaLocation="http://localhost:5669/ImageService.svc?xsd=xsd1" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:5669/ImageService.svc?xsd=xsd0" namespace="http://schemas.microsoft.com/Message" />
+      <xsd:import schemaLocation="http://localhost:5669/ImageService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:5669/ImageService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WebService" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ImageUploadRequest">
@@ -189,55 +227,74 @@
   <wsdl:message name="ImageUploadRequest_Headers">
     <wsdl:part name="ImageInfo" element="tns:ImageInfo" />
   </wsdl:message>
-  <wsdl:message name="IProcessingService_Upload_OutputMessage" />
+  <wsdl:message name="IImageService_AddImage_OutputMessage" />
   <wsdl:message name="ImageDownloadRequest">
     <wsdl:part name="parameters" element="tns:ImageDownloadRequest" />
   </wsdl:message>
   <wsdl:message name="ImageDownloadResponse">
     <wsdl:part name="parameters" element="tns:ImageDownloadResponse" />
   </wsdl:message>
-  <wsdl:portType name="IProcessingService">
-    <wsdl:operation name="Upload">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProcessingService/Upload" name="ImageUploadRequest" message="tns:ImageUploadRequest" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProcessingService/UploadResponse" message="tns:IProcessingService_Upload_OutputMessage" />
+  <wsdl:message name="ImageDeleteRequest">
+    <wsdl:part name="parameters" element="tns:ImageDeleteRequest" />
+  </wsdl:message>
+  <wsdl:message name="IImageService_DeleteImage_OutputMessage" />
+  <wsdl:portType name="IImageService">
+    <wsdl:operation name="AddImage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IImageService/AddImage" name="ImageUploadRequest" message="tns:ImageUploadRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IImageService/AddImageResponse" message="tns:IImageService_AddImage_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="Download">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProcessingService/Download" name="ImageDownloadRequest" message="tns:ImageDownloadRequest" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProcessingService/DownloadResponse" name="ImageDownloadResponse" message="tns:ImageDownloadResponse" />
+    <wsdl:operation name="GetImage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IImageService/GetImage" name="ImageDownloadRequest" message="tns:ImageDownloadRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IImageService/GetImageResponse" name="ImageDownloadResponse" message="tns:ImageDownloadResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteImage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IImageService/DeleteImage" name="ImageDeleteRequest" message="tns:ImageDeleteRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IImageService/DeleteImageResponse" message="tns:IImageService_DeleteImage_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="WSHttpBinding_IProcessingService" type="tns:IProcessingService">
-    <wsp:PolicyReference URI="#WSHttpBinding_IProcessingService_policy" />
+  <wsdl:binding name="WSHttpBinding_IImageService" type="tns:IImageService">
+    <wsp:PolicyReference URI="#WSHttpBinding_IImageService_policy" />
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="Upload">
-      <soap12:operation soapAction="http://tempuri.org/IProcessingService/Upload" style="document" />
+    <wsdl:operation name="AddImage">
+      <soap12:operation soapAction="http://tempuri.org/IImageService/AddImage" style="document" />
       <wsdl:input name="ImageUploadRequest">
-        <wsp:PolicyReference URI="#WSHttpBinding_IProcessingService_Upload_Input_policy" />
+        <wsp:PolicyReference URI="#WSHttpBinding_IImageService_AddImage_Input_policy" />
         <soap12:header message="tns:ImageUploadRequest_Headers" part="ImageInfo" use="literal" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
-        <wsp:PolicyReference URI="#WSHttpBinding_IProcessingService_Upload_output_policy" />
+        <wsp:PolicyReference URI="#WSHttpBinding_IImageService_AddImage_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Download">
-      <soap12:operation soapAction="http://tempuri.org/IProcessingService/Download" style="document" />
+    <wsdl:operation name="GetImage">
+      <soap12:operation soapAction="http://tempuri.org/IImageService/GetImage" style="document" />
       <wsdl:input name="ImageDownloadRequest">
-        <wsp:PolicyReference URI="#WSHttpBinding_IProcessingService_Download_Input_policy" />
+        <wsp:PolicyReference URI="#WSHttpBinding_IImageService_GetImage_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output name="ImageDownloadResponse">
-        <wsp:PolicyReference URI="#WSHttpBinding_IProcessingService_Download_output_policy" />
+        <wsp:PolicyReference URI="#WSHttpBinding_IImageService_GetImage_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteImage">
+      <soap12:operation soapAction="http://tempuri.org/IImageService/DeleteImage" style="document" />
+      <wsdl:input name="ImageDeleteRequest">
+        <wsp:PolicyReference URI="#WSHttpBinding_IImageService_DeleteImage_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IImageService_DeleteImage_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="ProcessingService">
-    <wsdl:port name="WSHttpBinding_IProcessingService" binding="tns:WSHttpBinding_IProcessingService">
-      <soap12:address location="http://localhost:5669/ProcessingService.svc" />
+  <wsdl:service name="ImageService">
+    <wsdl:port name="WSHttpBinding_IImageService" binding="tns:WSHttpBinding_IImageService">
+      <soap12:address location="http://localhost:5669/ImageService.svc" />
       <wsa10:EndpointReference>
-        <wsa10:Address>http://localhost:5669/ProcessingService.svc</wsa10:Address>
+        <wsa10:Address>http://localhost:5669/ImageService.svc</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>Loïc-PC\Loïc</Upn>
         </Identity>
