@@ -96,11 +96,11 @@ namespace TestKaZaPy
             imageInfo.Album = album.Id;
             isc.AddImage(imageInfo, imageMemoryStream);
 
-            /*Image image = DBAccess.GetImagesByAlbum(album).ElementAt(0);
+            Image image = DBAccess.GetImagesByAlbum(album).ElementAt(0);
             imageInfo.Id = image.Id;
             Stream imageStream = isc.GetImage(imageInfo);
 
-            isc.DeleteImage(imageInfo);*/
+            isc.DeleteImage(imageInfo);
 
             isc.Close();
 
@@ -121,10 +121,10 @@ namespace TestKaZaPy
 
         public static void Main(string[] args)
         {
-            TestDataAccess();
-            // TestImageService();
+            // TestDataAccess();
             // TestUserService();
             // TestAlbumService();
+            TestImageService();
         }
     }
 }
