@@ -37,7 +37,7 @@ namespace WebService
         public ImageDownloadResponse GetImage(ImageDownloadRequest data)
         {
             byte[] blob = DBAccess.GetImageById(data.ImageInfo.Id).Blob;
-            MemoryStream imageMemoryStream = new MemoryStream(blob);
+            Stream imageMemoryStream = new MemoryStream(blob);
             ImageDownloadResponse idr = new ImageDownloadResponse();
             idr.ImageData = imageMemoryStream;
             return idr;
