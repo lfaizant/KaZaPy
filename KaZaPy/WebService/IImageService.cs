@@ -79,6 +79,7 @@ namespace WebService
         /// Image informations
         /// </summary>
         [MessageBodyMember(Order = 1)]
+        //[MessageHeader(MustUnderstand = true)]
         public ImageInfo ImageInfo;
     }
 
