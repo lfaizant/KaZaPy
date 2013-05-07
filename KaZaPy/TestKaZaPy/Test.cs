@@ -119,12 +119,30 @@ namespace TestKaZaPy
             return blob;
         }
 
+        private static void TestWebClient()
+        {
+            Console.WriteLine("--- TEST : WebClient ---\n");
+
+            //Ajouter une image à la base de donner avant de lancer le web client qui utilise le web service
+            DBAccess.ResetTables();
+            DBAccess.AddUser(new User("Suzy", "Paeta", "suzy.paeta@gmail.com", "azerty"));
+            DBAccess.AddAlbum(new Album("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
+            Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
+            DBAccess.AddImage(new Image(readImage("C:/Users/user/Desktop/voyage1.jpg"), album.Id));
+            DBAccess.AddImage(new Image(readImage("C:/Users/user/Desktop/voyage2.jpg"), album.Id));
+            Console.WriteLine("--- END OF TEST WebClient---");
+            Console.ReadKey();
+        }
+
+
+
         public static void Main(string[] args)
         {
             // TestDataAccess();
             // TestUserService();
             // TestAlbumService();
-            TestImageService();
+            // TestImageService();
+            TestWebClient();
         }
     }
 }

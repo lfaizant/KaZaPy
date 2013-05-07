@@ -11,7 +11,7 @@ namespace DataAccess
     public class DBAccess
     {
         // Initialize the connection to the database
-        private const string connectionStr = "Server=LOÏC-PC;Database=KaZaPy_DB;Integrated Security=true;";
+        private const string connectionStr = "Server=X124;Database=KaZaPy_DB;Integrated Security=true;";
         private static SqlConnection oConnection = new SqlConnection(connectionStr);
 
         /// <summary>
