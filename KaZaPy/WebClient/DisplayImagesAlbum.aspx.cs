@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using ObjectClass;
 
 namespace WebClient
 {
@@ -13,22 +14,25 @@ namespace WebClient
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //int id = int.Parse(Request.QueryString["AlbumID"]);
-            //Label1.Text = Request.QueryString["AlbumID"];
+
             idAlbum = int.Parse(Request.QueryString["AlbumID"]);
 
-            //charger toutes les images de l'album id 
+            // Load all images of the album idAlbum
+            AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
+            Album album = asc.GetAlbumById(idAlbum);
+            List<ObjectClass.Image> images = album.Images;
 
-            for (int i = 0; i <= 3; i++)
+            foreach (ObjectClass.Image img in images)
             {
-                Image nImg = new Image();
-                nImg.ID = "ID" + i.ToString();
-               /* ID.ImageUrl = "Image.aspx?ImageID=" + i.ToString;
-                nImg.*/
+                int idImage = img.Id;
+
+                System.Web.UI.WebControls.Image nImg = new System.Web.UI.WebControls.Image();
+                nImg.ID = idImage.ToString();
+                nImg.ImageUrl = "Image.aspx?ImageID=" + idImage.ToString();
+                
                 Control myControl = this.FindControl("Form1");
                 myControl.Controls.Add(nImg);
             }
-
             
         }
 

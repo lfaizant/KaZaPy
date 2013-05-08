@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -11,17 +12,19 @@ namespace WebClient
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // On récupére la valeur du paramètre ImageID passé dans l’URL 
+ 
             int id = int.Parse(Request.QueryString["ImageID"]);
-            // Si ce paramètre n'est pas nul 
-            /*if (id != null)
+            
+            if (id != null)
             {
-                // on récupére notre image là où il faut  
+                ImageService.ImageServiceClient isc = new ImageService.ImageServiceClient();
+                ImageService.ImageInfo imageInfo = new ImageService.ImageInfo();
+                imageInfo.Id = id;
+                Stream imageStream = isc.GetImage(imageInfo);
 
-                //TODO
-                //Changer de bd à utiliser le web service
-                ObjectClass.Image img = (ObjectClass.Image)DataAccess.DBAccess.GetImageById(id, false);
-                Byte[] bytes = img.Blob;
+
+
+                Byte[] bytes = imageStream.
 
                 // et on crée le contenu de notre réponse à la requête HTTP  
                 // (ici un contenu de type image) 
@@ -32,7 +35,7 @@ namespace WebClient
                 Response.BinaryWrite(bytes);
                 Response.Flush();
                 Response.End();
-            } */
+            } 
 
         }
     }
