@@ -183,9 +183,11 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="DisplayAllAlbums.aspx" />
     <Content Include="DisplayImage.aspx" />
     <Content Include="Image.aspx" />
     <Content Include="Images\accent.png" />
+    <Content Include="Images\album.jpg" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\heroAccent.png" />
     <Content Include="Images\orderedList0.png" />
@@ -292,6 +294,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayAllAlbums.aspx.cs">
+      <DependentUpon>DisplayAllAlbums.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DisplayAllAlbums.aspx.designer.cs">
+      <DependentUpon>DisplayAllAlbums.aspx</DependentUpon>
     </Compile>
     <Compile Include="DisplayImage.aspx.cs">
       <DependentUpon>DisplayImage.aspx</DependentUpon>
