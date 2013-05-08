@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DisplayAllAlbums.aspx.cs" Inherits="WebClient.DisplayAllAlbums" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DisplayImagesAlbum.aspx.cs" Inherits="WebClient.DisplayImageAlbum" %>
 
 <!DOCTYPE html>
 
@@ -10,7 +10,6 @@
 <body>
     <form id="form1" runat="server">
     <div>
-
         <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
     </div>
     </form>

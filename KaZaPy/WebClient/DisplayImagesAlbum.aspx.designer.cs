@@ -10,7 +10,7 @@
 namespace WebClient {
     
     
-    public partial class DisplayAllAlbums {
+    public partial class DisplayImageAlbum {
         
         /// <summary>
         /// Contrôle form1.

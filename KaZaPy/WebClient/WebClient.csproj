@@ -185,6 +185,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="DisplayAllAlbums.aspx" />
     <Content Include="DisplayImage.aspx" />
+    <Content Include="DisplayImagesAlbum.aspx" />
     <Content Include="Image.aspx" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\album.jpg" />
@@ -308,6 +309,13 @@
     </Compile>
     <Compile Include="DisplayImage.aspx.designer.cs">
       <DependentUpon>DisplayImage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayImagesAlbum.aspx.cs">
+      <DependentUpon>DisplayImagesAlbum.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DisplayImagesAlbum.aspx.designer.cs">
+      <DependentUpon>DisplayImagesAlbum.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

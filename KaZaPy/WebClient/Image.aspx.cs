@@ -14,13 +14,13 @@ namespace WebClient
             // On récupére la valeur du paramètre ImageID passé dans l’URL 
             int id = int.Parse(Request.QueryString["ImageID"]);
             // Si ce paramètre n'est pas nul 
-            if (id != null)
+            /*if (id != null)
             {
                 // on récupére notre image là où il faut  
 
                 //TODO
                 //Changer de bd à utiliser le web service
-                /*ObjectClass.Image img = (ObjectClass.Image)DataAccess.DBAccess.GetImageById(id, false);
+                ObjectClass.Image img = (ObjectClass.Image)DataAccess.DBAccess.GetImageById(id, false);
                 Byte[] bytes = img.Blob;
 
                 // et on crée le contenu de notre réponse à la requête HTTP  
@@ -31,8 +31,8 @@ namespace WebClient
                 Response.ContentType = "image/jpeg";
                 Response.BinaryWrite(bytes);
                 Response.Flush();
-                Response.End();*/
-            } 
+                Response.End();
+            } */
 
         }
     }

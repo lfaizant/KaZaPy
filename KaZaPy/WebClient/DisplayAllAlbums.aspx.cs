@@ -12,13 +12,33 @@ namespace WebClient
         protected void Page_Load(object sender, EventArgs e)
         {
             //Charger tous les albums de la base de données via le web service
-            Label1.Text = "Mon album";
+
+            for (int i = 0; i <= 3; i++)
+            {
+                ImageButton nImg = new ImageButton();
+                nImg.ID = "ID" + i.ToString();
+                nImg.ImageUrl = "~/Images/album.jpg";
+                nImg.Click += new ImageClickEventHandler(openAlbum_Click);
+
+                Label lab = new Label();
+                lab.Text = nImg.ID;
+
+                Control myControl = this.FindControl("Form1");
+                myControl.Controls.Add(nImg);
+                myControl.Controls.Add(lab);
+
+            } 
+
         }
 
-        protected void ImageButton1_Click(object sender, ImageClickEventArgs e)
+        protected void openAlbum_Click(object sender, ImageClickEventArgs e)
         {
-            //Ouvrir l'album
-            Label1.Text = "clique sur album";
+            // Get the album id
+            ImageButton imgSender = (ImageButton)sender;
+            
+
+            // Open a new page with all the images of the album
+            Response.Redirect("DisplayImagesAlbum.aspx?AlbumID=" + imgSender.ID);
         }
 
     }
