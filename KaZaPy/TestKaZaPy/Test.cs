@@ -101,7 +101,6 @@ namespace TestKaZaPy
             Stream imageStream = isc.GetImage(imageInfo);
 
             isc.DeleteImage(imageInfo);
-
             isc.Close();
 
             Console.WriteLine("--- END OF TEST ---");

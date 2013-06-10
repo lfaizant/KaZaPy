@@ -22,9 +22,9 @@ namespace WebClient
                 imageInfo.Id = id;
                 Stream imageStream = isc.GetImage(imageInfo);
 
+    
 
-
-                Byte[] bytes = imageStream.
+               // Byte[] bytes = imageStream.t
 
                 // et on crée le contenu de notre réponse à la requête HTTP  
                 // (ici un contenu de type image) 

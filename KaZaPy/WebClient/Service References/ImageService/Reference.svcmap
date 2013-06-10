@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="b518334e-8c2e-4124-a28e-cd3b826bd98e" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="3b45f508-7daa-45ee-a96c-c3fbdb0f2eae" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,12 +22,12 @@
     <MetadataSource Address="http://localhost:5669/ImageService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ImageService.wsdl" MetadataType="Wsdl" ID="672d43d7-0189-406b-972c-07256d56e03f" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?wsdl" />
-    <MetadataFile FileName="ImageService.xsd" MetadataType="Schema" ID="c3e0169b-d667-42c1-b710-e93fc1397d39" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?xsd=xsd1" />
-    <MetadataFile FileName="ImageService1.xsd" MetadataType="Schema" ID="d7b38815-13d3-4e8b-81e3-1ef3dbf67bdd" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ImageService2.xsd" MetadataType="Schema" ID="8093261e-1b78-4a9f-8f78-e928451731a6" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?xsd=xsd2" />
-    <MetadataFile FileName="ImageService3.xsd" MetadataType="Schema" ID="e67b3191-a1df-4ddd-a2e7-f3144c7bfb37" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?xsd=xsd3" />
-    <MetadataFile FileName="ImageService.disco" MetadataType="Disco" ID="3ec39b3d-9e71-4e37-a0d6-5eec6c212d71" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?disco" />
+    <MetadataFile FileName="ImageService.wsdl" MetadataType="Wsdl" ID="53bbbe4c-3ce2-4fbc-a973-8733f38f810a" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?wsdl" />
+    <MetadataFile FileName="ImageService.xsd" MetadataType="Schema" ID="6bf9d14c-bedb-44d2-9dcb-6da36ce4c93b" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ImageService1.xsd" MetadataType="Schema" ID="532744f7-a301-4b30-8c8f-734e208fae9c" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ImageService2.xsd" MetadataType="Schema" ID="5f56ccd6-eb4b-48ae-a326-9f0d5fb2d634" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ImageService3.xsd" MetadataType="Schema" ID="ce13f340-f0f1-490a-8cc9-5feedc6769eb" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ImageService.disco" MetadataType="Disco" ID="ece00ead-7810-4572-99ad-34379aedd954" SourceId="1" SourceUrl="http://localhost:5669/ImageService.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
