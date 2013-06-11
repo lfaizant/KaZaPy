@@ -10,6 +10,7 @@ namespace ObjectClass
     /// </summary>
     public class BadAlbumException : Exception
     {
-        public BadAlbumException(int image, int album) : base("IDs doesn't match between image and album : image ID = " + image + ", album ID = " + album) { }
+        public BadAlbumException(int image, int album)
+            : base("IDs doesn't match between image and album : image ID = " + image + ", album ID = " + album) { }
     }
 }

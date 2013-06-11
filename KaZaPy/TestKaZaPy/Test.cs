@@ -90,7 +90,7 @@ namespace TestKaZaPy
             DBAccess.AddAlbum(new Album("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
             Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
 
-            MemoryStream imageMemoryStream = new MemoryStream(readImage(@"c:\image.jpg"));
+            MemoryStream imageMemoryStream = new MemoryStream(ReadImage(@"c:\image.jpg"));
             ImageService.ImageServiceClient isc = new ImageService.ImageServiceClient();
             ImageService.ImageInfo imageInfo = new ImageService.ImageInfo();
             imageInfo.Album = album.Id;
@@ -107,7 +107,7 @@ namespace TestKaZaPy
             Console.ReadKey();
         }
 
-        private static byte[] readImage(string path)
+        private static byte[] ReadImage(string path)
         {
             byte[] blob = null;
             FileInfo fileInfo = new FileInfo(path);
@@ -116,6 +116,23 @@ namespace TestKaZaPy
             BinaryReader br = new BinaryReader(fileStream);
             blob = br.ReadBytes(nbBytes);
             return blob;
+        }
+
+        private static void TestAdminInterface()
+        {
+            Console.WriteLine("--- TEST : AdminInterface ---\n");
+
+            DBAccess.ResetTables();
+
+            DBAccess.AddUser(new User("Suzy", "Paeta", "suzy.paeta@gmail.com", "azerty"));
+
+            DBAccess.AddAlbum(new Album("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
+            Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
+
+            DBAccess.AddImage(new Image(ReadImage(@"c:\image.jpg"), album.Id));
+
+            Console.WriteLine("The database is ready for test");
+            Console.ReadKey();
         }
 
         private static void TestWebClient()
@@ -127,8 +144,8 @@ namespace TestKaZaPy
             DBAccess.AddUser(new User("Suzy", "Paeta", "suzy.paeta@gmail.com", "azerty"));
             DBAccess.AddAlbum(new Album("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
             Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
-            DBAccess.AddImage(new Image(readImage("C:/Users/user/Desktop/voyage1.jpg"), album.Id));
-            DBAccess.AddImage(new Image(readImage("C:/Users/user/Desktop/voyage2.jpg"), album.Id));
+            DBAccess.AddImage(new Image(ReadImage("C:/Users/user/Desktop/voyage1.jpg"), album.Id));
+            DBAccess.AddImage(new Image(ReadImage("C:/Users/user/Desktop/voyage2.jpg"), album.Id));
             Console.WriteLine("--- END OF TEST WebClient---");
             Console.ReadKey();
         }
@@ -141,7 +158,8 @@ namespace TestKaZaPy
             // TestUserService();
             // TestAlbumService();
             // TestImageService();
-            TestWebClient();
+            TestAdminInterface();
+            // TestWebClient();
         }
     }
 }

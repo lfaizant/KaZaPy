@@ -41,12 +41,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
+    <Compile Include="AbstractCommand.cs" />
     <Compile Include="AdminConsole.cs" />
+    <Compile Include="DeleteAlbumCommand.cs" />
+    <Compile Include="DeleteImageCommand.cs" />
+    <Compile Include="DeleteUserCommand.cs" />
+    <Compile Include="ExitCommand.cs" />
+    <Compile Include="HelpCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{195d882d-90aa-4310-b96e-5dcc05945b14}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ObjectClass\ObjectClass.csproj">
+      <Project>{9619d404-dfc0-4f1e-b599-d7b3f39b7b32}</Project>
+      <Name>ObjectClass</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

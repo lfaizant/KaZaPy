@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace AdminInterface
 {
-    interface ICommand
+    abstract class AbstractCommand
     {
-        void Execute();
+        public AbstractCommand() { }
+
+        public abstract void Execute();
     }
 }
