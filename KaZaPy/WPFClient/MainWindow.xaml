@@ -71,7 +71,13 @@
             DataContext="{StaticResource ImageCollection1}" 
             PreviewMouseLeftButtonDown="ImageDragEvent" 
             Drop="ImageDropEvent" 
-            Grid.Row="0"/>
+            Grid.Row="0">
+            <ListBox.ItemContainerStyle>
+                <Style>
+                    <EventSetter Event="ListBoxItem.PreviewMouseDoubleClick" Handler="OpenAlbum" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
         <GridSplitter HorizontalAlignment="Stretch"  
                  ResizeBehavior="PreviousAndNext" 
                  Height="5" 
@@ -82,6 +88,7 @@
             PreviewMouseLeftButtonDown="ImageDragEvent" 
             Drop="ImageDropEvent" 
             Grid.Row="2"/>
+        <Button Content="Load Image" HorizontalAlignment="Left" Margin="707,246,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" PreviewMouseLeftButtonDown="LoadLocalImages" />
     </Grid>
     
 </Window> 

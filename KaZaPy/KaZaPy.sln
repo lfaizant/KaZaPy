@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{05CEF398-9168-4BE5-B461-45E29991E65A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFClient", "WPFClient\WPFClient.csproj", "{6A61ED5A-0F31-4B66-BEE9-D9BBEE0C86B9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{649B50F4-65D2-45A7-93C4-38C11A2E6FE1} = {649B50F4-65D2-45A7-93C4-38C11A2E6FE1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestKaZaPy", "TestKaZaPy\TestKaZaPy.csproj", "{BB54229B-71F4-43EA-8739-CFA7416DEE63}"
 EndProject
