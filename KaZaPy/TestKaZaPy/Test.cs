@@ -118,9 +118,9 @@ namespace TestKaZaPy
             return blob;
         }
 
-        private static void TestAdminInterface()
+        private static void AddSomeData()
         {
-            Console.WriteLine("--- TEST : AdminInterface ---\n");
+            Console.WriteLine("--- Storage of some data ---\n");
 
             DBAccess.ResetTables();
 
@@ -131,7 +131,7 @@ namespace TestKaZaPy
 
             DBAccess.AddImage(new Image(ReadImage(@"c:\image.jpg"), album.Id));
 
-            Console.WriteLine("The database is ready for test");
+            Console.WriteLine("The database is ready for tests");
             Console.ReadKey();
         }
 
@@ -158,7 +158,7 @@ namespace TestKaZaPy
             // TestUserService();
             // TestAlbumService();
             // TestImageService();
-            TestAdminInterface();
+            AddSomeData();
             // TestWebClient();
         }
     }
