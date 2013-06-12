@@ -17,6 +17,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{195D882D-90AA-4310-B96E-5DCC05945B14}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{479F7FE8-F01D-422D-97BA-7CEB3700894B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{649B50F4-65D2-45A7-93C4-38C11A2E6FE1} = {649B50F4-65D2-45A7-93C4-38C11A2E6FE1}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -69,7 +69,6 @@
     <Compile Include="AlbumService.svc.cs">
       <DependentUpon>AlbumService.svc</DependentUpon>
     </Compile>
-    <Compile Include="CustomUserNameValidator.cs" />
     <Compile Include="IAlbumService.cs" />
     <Compile Include="IImageService.cs" />
     <Compile Include="ImageService.svc.cs">

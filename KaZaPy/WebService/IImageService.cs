@@ -56,12 +56,21 @@ namespace WebService
         public Stream ImageData;
     }
 
+    public class ImageUploadResponse
+    {
+        [MessageBodyMember(Order = 1)]
+        public ImageInfo ImageInfo;
+    }
+
     /// <summary>
     /// Response to an image download
     /// </summary>
     [MessageContract]
     public class ImageDownloadResponse
     {
+        [MessageHeader(MustUnderstand = true)]
+        public ImageInfo ImageInfo;
+
         /// <summary>
         /// Image contents
         /// </summary>
