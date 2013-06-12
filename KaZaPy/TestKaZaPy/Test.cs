@@ -131,25 +131,12 @@ namespace TestKaZaPy
 
             DBAccess.AddImage(new Image(ReadImage(@"C:\Users\user\Desktop\album.jpg"), album.Id));
 
+            DBAccess.AddUser(new User("Loïc", "Faizant", "loic.faizant@gmail.com", "azerty"));
+            DBAccess.AddAlbum(new Album("Party", DBAccess.GetUserByEmail("loic.faizant@gmail.com").Id));
+
             Console.WriteLine("The database is ready for tests");
             Console.ReadKey();
         }
-
-        private static void TestWebClient()
-        {
-            Console.WriteLine("--- TEST : WebClient ---\n");
-
-            //Ajouter une image à la base de donner avant de lancer le web client qui utilise le web service
-            DBAccess.ResetTables();
-            DBAccess.AddUser(new User("Suzy", "Paeta", "suzy.paeta@gmail.com", "azerty"));
-            DBAccess.AddAlbum(new Album("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
-            Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
-            DBAccess.AddImage(new Image(ReadImage("C:/Users/user/Desktop/voyage1.jpg"), album.Id));
-            DBAccess.AddImage(new Image(ReadImage("C:/Users/user/Desktop/voyage2.jpg"), album.Id));
-            Console.WriteLine("--- END OF TEST WebClient---");
-            Console.ReadKey();
-        }
-
 
 
         public static void Main(string[] args)
@@ -159,7 +146,6 @@ namespace TestKaZaPy
             // TestAlbumService();
             // TestImageService();
             AddSomeData();
-            // TestWebClient();
         }
     }
 }

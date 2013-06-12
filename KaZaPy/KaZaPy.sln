@@ -6,6 +6,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectClass", "ObjectClass\ObjectClass.csproj", "{9619D404-DFC0-4F1E-B599-D7B3F39B7B32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminInterface", "AdminInterface\AdminInterface.csproj", "{FCAFD0A1-7CAA-4A74-AAD3-E69B036023D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{649B50F4-65D2-45A7-93C4-38C11A2E6FE1} = {649B50F4-65D2-45A7-93C4-38C11A2E6FE1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFClient", "WPFClient\WPFClient.csproj", "{6A61ED5A-0F31-4B66-BEE9-D9BBEE0C86B9}"
 	ProjectSection(ProjectDependencies) = postProject

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ObjectClass;
-using DataAccess;
 
 namespace AdminInterface
 {
     class DeleteImageCommand : AbstractCommand
     {
-        private Image image;
+        private ImageService.ImageInfo imageInfo;
+        private ImageService.ImageServiceClient imageServiceClient;
 
         public DeleteImageCommand(string[] args)
             : base()
@@ -18,12 +18,14 @@ namespace AdminInterface
             if (args.Length < 2)
                 throw new SyntaxException("delete_image", "[id]");
 
-            image = DBAccess.GetImageById(Convert.ToInt32(args[1]));
+            imageServiceClient = new ImageService.ImageServiceClient();
+            imageInfo = new ImageService.ImageInfo();
+            imageInfo.Id = Convert.ToInt32(args[1]);
         }
 
         public override void Execute()
         {
-            DBAccess.DeleteImage(image);
+            imageServiceClient.DeleteImage(imageInfo);
             Console.WriteLine("Image deleted.");
         }
     }
