@@ -36,18 +36,40 @@ namespace WPFClient
 
         private int currentAlbumId;
         private string albumName;
-        private int idUser = 2;
 
         private bool displayAlbum = false;
+
+        private string emailConnexion;
+        private string passwordConnexion;
+        private User u;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            connexion();
+
             imageCollection1 = new ImageCollection();
             imageCollection2 = new ImageCollection();
             albumCollection = new AlbumObject.AlbumCollection();
 
             DisplayAllAlbumUser();
+        }
+
+        private void connexion()
+        {
+            Connexion c = new Connexion();
+            c.ShowDialog();
+            emailConnexion = c.getEmail();
+            passwordConnexion = c.getPassword();
+
+            u = DBAccess.GetUserByEmail(emailConnexion);
+            if(u.Password.Equals(passwordConnexion, System.StringComparison.Ordinal))
+            {
+                DBAccess.LogInUser(u);
+              //  connexion();
+            }
+
         }
 
         Point startpoint;
@@ -155,7 +177,7 @@ namespace WPFClient
             // Get album from the user           
             //AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
             //Album[] listAl = asc.GetAllAlbums();
-            List<Album> listAl = DBAccess.GetAllAlbums();
+            List<Album> listAl = DBAccess.GetAlbumsByUser(u);
             foreach (Album a in listAl)
             {
                 albumCollection.Add(new AlbumObject(a.Id, a.Name, null));
@@ -277,7 +299,7 @@ namespace WPFClient
 
         private void CreateAlbum(object sender, MouseButtonEventArgs e)
         {
-            DBAccess.AddAlbum(new Album(albumName, idUser));
+            DBAccess.AddAlbum(new Album(albumName, u.Id));
             DisplayAllAlbumUser();
         }
 
@@ -290,6 +312,12 @@ namespace WPFClient
         {
             TextBox parent = (TextBox)sender;
             albumName = parent.Text;
+        }
+
+        private void Logout(object sender, MouseButtonEventArgs e)
+        {
+            DBAccess.LogOutUser(u);
+            this.Close();
         }
 
        

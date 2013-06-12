@@ -129,7 +129,7 @@ namespace TestKaZaPy
             DBAccess.AddAlbum(new Album("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id));
             Album album = DBAccess.GetAlbumByNameAndOwner("Holidays", DBAccess.GetUserByEmail("suzy.paeta@gmail.com").Id);
 
-            DBAccess.AddImage(new Image(ReadImage(@"c:\image.jpg"), album.Id));
+            DBAccess.AddImage(new Image(ReadImage(@"C:\Users\user\Desktop\album.jpg"), album.Id));
 
             Console.WriteLine("The database is ready for tests");
             Console.ReadKey();

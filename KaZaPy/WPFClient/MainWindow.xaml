@@ -93,8 +93,9 @@
             Grid.Row="3"/>
         <Button Content="Load Image" HorizontalAlignment="Left" Margin="707,246,0,0" VerticalAlignment="Top" Width="75" Grid.Row="3" PreviewMouseLeftButtonDown="LoadLocalImages" Height="22" />
         <Button Name="ButtonCreateAlbum" Content="Create Album" HorizontalAlignment="Left" Margin="688,5,0,0" VerticalAlignment="Top" Width="94" RenderTransformOrigin="-0.227,-0.136" PreviewMouseLeftButtonDown="CreateAlbum" Grid.Row="1" Height="22" Grid.RowSpan="2"/>
-        <TextBox Name="TextBoxAlbum" HorizontalAlignment="Left" Height="23" Margin="549,4,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged_1" Grid.RowSpan="2"/>
+        <TextBox Name="TextBoxAlbum" HorizontalAlignment="Left" Height="23" Margin="549,4,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Album Name" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged_1" Grid.RowSpan="2"/>
         <Button Name="Back" Content="Back" HorizontalAlignment="Left" Height="21" Margin="688,42,0,0" Grid.Row="2" VerticalAlignment="Top" Width="94" PreviewMouseLeftButtonDown="BackEvent"/>
+        <Button Content="Log out" HorizontalAlignment="Left" Margin="30,27,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" PreviewMouseLeftButtonDown="Logout"/>
     </Grid>
 
 </Window> 

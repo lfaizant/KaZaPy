@@ -1,0 +1,12 @@
+﻿<Window x:Class="WPFClient.Connexion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Connexion" Height="500" Width="500">
+    <Grid>
+        <Label Content="Email :" Height="26" HorizontalAlignment="Center" Margin="34,115,402,0" Name="label1" VerticalAlignment="Top" Width="56" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="139,0,0,332" Name="emailBox" VerticalAlignment="Bottom" Width="150" />
+        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="139,198,0,0" Name="passwordBox" VerticalAlignment="Top" Width="150" />
+        <Button Content="Log in" Height="24" HorizontalAlignment="Left" Margin="366,313,0,0" Name="valider" VerticalAlignment="Top" Width="70" PreviewMouseLeftButtonDown="LoginClick" />
+        <Label Content="Password :" Height="26" HorizontalAlignment="Center" Margin="34,195,391,0" Name="label2" VerticalAlignment="Top" Width="67" />
+    </Grid>
+</Window>
