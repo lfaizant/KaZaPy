@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,8 +17,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DataAccess;
-using System.Drawing;
-using System.Collections.ObjectModel;
 using ObjectClass;
 
 namespace WPFClient
@@ -27,15 +27,18 @@ namespace WPFClient
     public partial class MainWindow : Window
     {
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private string openFileName;
+        private string openFolderName;
 
         private ImageCollection imageCollection1;
         private ImageCollection imageCollection2;
         private WPFClient.AlbumObject.AlbumCollection albumCollection;
-        ListBox dragSource = null; 
+        ListBox dragSource = null;
+
+        private int currentAlbumId;
 
         public MainWindow()
         {
+            Console.WriteLine("Main");
             InitializeComponent();
             imageCollection1 = new ImageCollection();
             imageCollection2 = new ImageCollection();
@@ -48,7 +51,7 @@ namespace WPFClient
         }
 
         // On initie le Drag and Drop 
-        private void ImageDragEvent(object sender, MouseButtonEventArgs e)
+        /*private void ImageDragEvent(object sender, MouseButtonEventArgs e)
         {
             ListBox parent = (ListBox)sender;
             dragSource = parent;
@@ -56,6 +59,31 @@ namespace WPFClient
             if (data != null)
             {
                 DragDrop.DoDragDrop(parent, data, DragDropEffects.Move);
+            }
+        }*/
+
+        Point startpoint;
+        private void StartDrag(object sender, MouseButtonEventArgs e)
+        {
+            startpoint = e.GetPosition(null);
+        }
+
+        private void ImageDragEvent(object sender, MouseEventArgs e)
+        {
+            Point mousePos = e.GetPosition(null);
+            Vector diff = startpoint - mousePos;
+
+            if (e.LeftButton == MouseButtonState.Pressed &&
+                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+            {
+                ListBox parent = (ListBox)sender;
+                dragSource = parent;
+                object data = GetDataFromListBox(dragSource, e.GetPosition(parent));
+                if (data != null)
+                {
+                    DragDrop.DoDragDrop(parent, data, DragDropEffects.Move);
+                }
             }
         }
 
@@ -101,6 +129,7 @@ namespace WPFClient
            
             ListBoxItem parent = (ListBoxItem)sender;
             AlbumObject ao = (AlbumObject)parent.Content;
+            currentAlbumId = ao.ID;
             DisplayAlbumId(ao.ID);
         }
 
@@ -112,10 +141,10 @@ namespace WPFClient
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                openFileName = folderBrowserDialog1.SelectedPath;
+                openFolderName = folderBrowserDialog1.SelectedPath;
             }
 
-            DisplayLocalFolder(openFileName);
+            DisplayLocalFolder(openFolderName);
         }
 
         private void DisplayAllAlbumUser()
@@ -124,7 +153,8 @@ namespace WPFClient
 
             // Get album from the user
             // List<Album> listAl = DBAccess.GetAlbumsByUser(    );            
-            List<Album> listAl = DBAccess.GetAllAlbums();
+            AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
+            Album[] listAl = asc.GetAllAlbums();
             foreach (Album a in listAl)
             {
                 albumCollection.Add(new AlbumObject(a.Id, a.Name, null));
@@ -138,6 +168,8 @@ namespace WPFClient
 
         private void DisplayAlbumId(int id)
         {
+            imageCollection1 = new ImageCollection();
+
             Album a = DBAccess.GetAlbumById(id);
             List<ObjectClass.Image> lia = a.Images;
 
@@ -172,12 +204,64 @@ namespace WPFClient
             byte[] data = null;
             FileInfo fileInfo = new FileInfo(path);
             int nbBytes = (int)fileInfo.Length;
-            FileStream fileStream = new FileStream(path, FileMode.Open,
-            FileAccess.Read);
+            FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
             BinaryReader br = new BinaryReader(fileStream);
             data = br.ReadBytes(nbBytes);
             return data;
         }
-        
+
+        private void uploadImage(int IdAlbum, byte[] image)
+        {
+            DBAccess.AddImage(new ObjectClass.Image(image, IdAlbum));
+        }
+
+        private void ImageUploadEvent(object sender, DragEventArgs e)
+        {
+            ListBox parent = (ListBox)sender;
+            ImageObject data = (ImageObject)e.Data.GetData(typeof(ImageObject));
+            uploadImage(currentAlbumId, data.Image);
+            DisplayAlbumId(currentAlbumId);
+        }
+
+        private void ImageDownloadEvent(object sender, DragEventArgs e)
+        {
+            ListBox parent = (ListBox)sender;
+            if (e.Data.GetData(typeof(ImageObject)) != null)
+            {
+                ImageObject data = (ImageObject)e.Data.GetData(typeof(ImageObject));
+
+                if (data.Nom != null)
+                {
+                    string newpath = System.IO.Path.Combine(openFolderName, data.Nom);
+                    newpath += ".jpg";
+
+                    try
+                    {
+                        using (FileStream fs = new FileStream(newpath, FileMode.Create))
+                        {
+                            fs.Write(data.Image, 0, data.Image.Length);
+                        }
+                        DisplayLocalFolder(openFolderName);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Image already existing");
+                    }
+                }
+            }
+        }
+
+        private void DeleteAlbum(object sender, KeyEventArgs k)
+        {
+            if (Key.Delete == k.Key)
+            {
+                string albumName;
+                string value = "Album name";
+                /*if (InputBox("New document", "New document name:", ref value) == System.Windows.Forms.DialogResult.OK)
+                {
+                    albumName = value;
+                }*/
+            }
+        }
     }
 }

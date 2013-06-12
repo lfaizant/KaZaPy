@@ -69,12 +69,14 @@
         <ListBox x:Name="ListBox1" 
             Style="{StaticResource ImageListBoxStyle}" 
             DataContext="{StaticResource ImageCollection1}" 
-            PreviewMouseLeftButtonDown="ImageDragEvent" 
-            Drop="ImageDropEvent" 
+            PreviewMouseLeftButtonDown="StartDrag" 
+            PreviewMouseMove="ImageDragEvent"
+            Drop="ImageUploadEvent" 
             Grid.Row="0">
             <ListBox.ItemContainerStyle>
                 <Style>
                     <EventSetter Event="ListBoxItem.PreviewMouseDoubleClick" Handler="OpenAlbum" />
+                    <EventSetter Event="ListBoxItem.PreviewKeyUp" Handler="DeleteAlbum" />
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
@@ -85,10 +87,12 @@
         <ListBox x:Name="ListBox2" 
             Style="{StaticResource ImageListBoxStyle}" 
             DataContext="{StaticResource ImageCollection2}" 
-            PreviewMouseLeftButtonDown="ImageDragEvent" 
-            Drop="ImageDropEvent" 
+            PreviewMouseLeftButtonDown="StartDrag" 
+            PreviewMouseMove="ImageDragEvent" 
+            Drop="ImageDownloadEvent" 
             Grid.Row="2"/>
         <Button Content="Load Image" HorizontalAlignment="Left" Margin="707,246,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" PreviewMouseLeftButtonDown="LoadLocalImages" />
+        <Button Content="Create Album" HorizontalAlignment="Left" Margin="688,229,0,0" VerticalAlignment="Top" Width="94" RenderTransformOrigin="-0.227,-0.136" PreviewMouseLeftButtonDown="CreateAlbum"/>
     </Grid>
     
 </Window> 
