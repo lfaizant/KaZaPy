@@ -35,19 +35,19 @@ namespace WPFClient
         ListBox dragSource = null;
 
         private int currentAlbumId;
+        private string albumName;
+        private int idUser = 2;
+
+        private bool displayAlbum = false;
 
         public MainWindow()
         {
-            Console.WriteLine("Main");
             InitializeComponent();
             imageCollection1 = new ImageCollection();
             imageCollection2 = new ImageCollection();
             albumCollection = new AlbumObject.AlbumCollection();
 
             DisplayAllAlbumUser();
-
-            ObjectDataProvider imageSource2 = (ObjectDataProvider)FindResource("ImageCollection2");
-            imageSource2.ObjectInstance = imageCollection2; 
         }
 
         Point startpoint;
@@ -58,19 +58,22 @@ namespace WPFClient
 
         private void ImageDragEvent(object sender, MouseEventArgs e)
         {
-            Point mousePos = e.GetPosition(null);
-            Vector diff = startpoint - mousePos;
-
-            if (e.LeftButton == MouseButtonState.Pressed &&
-                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+            if (!displayAlbum)
             {
-                ListBox parent = (ListBox)sender;
-                dragSource = parent;
-                object data = GetDataFromListBox(dragSource, e.GetPosition(parent));
-                if (data != null)
+                Point mousePos = e.GetPosition(null);
+                Vector diff = startpoint - mousePos;
+
+                if (e.LeftButton == MouseButtonState.Pressed &&
+                    (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
                 {
-                    DragDrop.DoDragDrop(parent, data, DragDropEffects.Move);
+                    ListBox parent = (ListBox)sender;
+                    dragSource = parent;
+                    object data = GetDataFromListBox(dragSource, e.GetPosition(parent));
+                    if (data != null)
+                    {
+                        DragDrop.DoDragDrop(parent, data, DragDropEffects.Move);
+                    }
                 }
             }
         }
@@ -78,10 +81,13 @@ namespace WPFClient
         // On ajoute l'objet dans la nouvelle ListBox et on le supprime de l'ancienne 
         private void ImageDropEvent(object sender, DragEventArgs e)
         {
-            ListBox parent = (ListBox)sender;
-            ImageObject data = (ImageObject)e.Data.GetData(typeof(ImageObject));
-            ((IList)dragSource.ItemsSource).Remove(data);
-            ((IList)parent.ItemsSource).Add(data);
+            if (!displayAlbum)
+            {
+                ListBox parent = (ListBox)sender;
+                ImageObject data = (ImageObject)e.Data.GetData(typeof(ImageObject));
+                ((IList)dragSource.ItemsSource).Remove(data);
+                ((IList)parent.ItemsSource).Add(data);
+            }
         }
 
         // On récupére l'objet que que l'on a dropé 
@@ -113,12 +119,18 @@ namespace WPFClient
 
         private void OpenAlbum(object sender, MouseButtonEventArgs e)
         {
-            Console.WriteLine("Clique");
-           
-            ListBoxItem parent = (ListBoxItem)sender;
-            AlbumObject ao = (AlbumObject)parent.Content;
-            currentAlbumId = ao.ID;
-            DisplayAlbumId(ao.ID);
+            if (displayAlbum)
+            {
+                ListBoxItem parent = (ListBoxItem)sender;
+                AlbumObject ao = (AlbumObject)parent.Content;
+                currentAlbumId = ao.ID;
+                DisplayAlbumId(ao.ID);
+                displayAlbum = false;
+                ButtonCreateAlbum.Visibility = Visibility.Hidden;
+                TextBoxAlbum.Visibility = Visibility.Hidden;
+                Back.Visibility = Visibility.Visible;
+            }
+
         }
 
         private void LoadLocalImages(object sender, MouseButtonEventArgs e)
@@ -137,11 +149,13 @@ namespace WPFClient
 
         private void DisplayAllAlbumUser()
         {
+            albumCollection = new AlbumObject.AlbumCollection();
             // Get user id
 
             // Get album from the user           
-            AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
-            Album[] listAl = asc.GetAllAlbums();
+            //AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
+            //Album[] listAl = asc.GetAllAlbums();
+            List<Album> listAl = DBAccess.GetAllAlbums();
             foreach (Album a in listAl)
             {
                 albumCollection.Add(new AlbumObject(a.Id, a.Name, null));
@@ -151,14 +165,19 @@ namespace WPFClient
             ObjectDataProvider imageSource = (ObjectDataProvider)FindResource("ImageCollection1");
             imageSource.ObjectInstance = albumCollection;
 
+            displayAlbum = true;
+            ButtonCreateAlbum.Visibility = Visibility.Visible;
+            TextBoxAlbum.Visibility = Visibility.Visible;
+            Back.Visibility = Visibility.Hidden;
         }
 
         private void DisplayAlbumId(int id)
         {
             imageCollection1 = new ImageCollection();
 
-            AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
-            Album a = asc.GetAlbumById(id);
+            /*AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
+            Album a = asc.GetAlbumById(id);*/
+            Album a = DBAccess.GetAlbumById(id);
             List<ObjectClass.Image> lia = a.Images;
 
             foreach(ObjectClass.Image img in lia)
@@ -200,12 +219,12 @@ namespace WPFClient
 
         private void uploadImage(int IdAlbum, byte[] image)
         {
-            //DBAccess.AddImage(new ObjectClass.Image(image, IdAlbum));
-            MemoryStream imageMemoryStream = new MemoryStream(image);
+            DBAccess.AddImage(new ObjectClass.Image(image, IdAlbum));
+           /* MemoryStream imageMemoryStream = new MemoryStream(image);
             ImageService.ImageServiceClient isc = new ImageService.ImageServiceClient();
             ImageService.ImageInfo imageInfo = new ImageService.ImageInfo();
             imageInfo.Album = IdAlbum;
-            isc.AddImage(imageInfo, imageMemoryStream);
+            isc.AddImage(imageInfo, imageMemoryStream);*/
         }
 
         private void ImageUploadEvent(object sender, DragEventArgs e)
@@ -248,18 +267,31 @@ namespace WPFClient
         {
             if (Key.Delete == k.Key)
             {
-
+                Console.WriteLine("delete");
+                ListBoxItem parent = (ListBoxItem)sender;
+                AlbumObject ao = (AlbumObject)parent.Content;
+                DBAccess.DeleteAlbum(DBAccess.GetAlbumById(ao.ID));
+                DisplayAllAlbumUser();
             }
         }
 
         private void CreateAlbum(object sender, MouseButtonEventArgs e)
         {
-            string albumName;
-            string value = "Album name";
-            /*if (InputBox("New document", "New document name:", ref value) == System.Windows.Forms.DialogResult.OK)
-            {
-                albumName = value;
-            }*/
+            DBAccess.AddAlbum(new Album(albumName, idUser));
+            DisplayAllAlbumUser();
         }
+
+        private void BackEvent(object sender, MouseButtonEventArgs e)
+        {
+            DisplayAllAlbumUser();
+        }
+
+        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+            TextBox parent = (TextBox)sender;
+            albumName = parent.Text;
+        }
+
+       
     }
 }

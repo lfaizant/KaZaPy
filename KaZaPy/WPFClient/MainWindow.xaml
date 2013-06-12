@@ -6,7 +6,7 @@
     <Window.Resources>
 
         <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
-        
+
         <!-- Permet de faire le lien entre une ListBox et une collection de données-->
         <ObjectDataProvider x:Key="ImageCollection1"/>
         <ObjectDataProvider x:Key="ImageCollection2"/>
@@ -20,7 +20,7 @@
                 </StackPanel>
             </Border>
         </DataTemplate>
-        
+
         <!-- Style pour chaque image-->
         <Style x:Key="NotreStyleDeRectangle" TargetType="Rectangle">
             <Setter Property="Width" Value="100"/>
@@ -43,7 +43,7 @@
                 </EventTrigger>
             </Style.Triggers>
         </Style>
-        
+
         <!-- Style pour chaque liste -->
         <Style x:Key="ImageListBoxStyle" TargetType="ListBox">
             <Setter Property="ItemsSource" Value="{Binding}" />
@@ -62,9 +62,10 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="224*" />
+            <RowDefinition Height="0*"/>
+            <RowDefinition Height="Auto" MinHeight="73" />
+            <RowDefinition Height="293*" />
         </Grid.RowDefinitions>
         <ListBox x:Name="ListBox1" 
             Style="{StaticResource ImageListBoxStyle}" 
@@ -82,17 +83,18 @@
         </ListBox>
         <GridSplitter HorizontalAlignment="Stretch"  
                  ResizeBehavior="PreviousAndNext" 
-                 Height="5" 
-                 Grid.Row="1"/>
+                 Grid.Row="2" Margin="0,2"/>
         <ListBox x:Name="ListBox2" 
             Style="{StaticResource ImageListBoxStyle}" 
             DataContext="{StaticResource ImageCollection2}" 
             PreviewMouseLeftButtonDown="StartDrag" 
             PreviewMouseMove="ImageDragEvent" 
             Drop="ImageDownloadEvent" 
-            Grid.Row="2"/>
-        <Button Content="Load Image" HorizontalAlignment="Left" Margin="707,246,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" PreviewMouseLeftButtonDown="LoadLocalImages" />
-        <Button Content="Create Album" HorizontalAlignment="Left" Margin="688,229,0,0" VerticalAlignment="Top" Width="94" RenderTransformOrigin="-0.227,-0.136" PreviewMouseLeftButtonDown="CreateAlbum"/>
+            Grid.Row="3"/>
+        <Button Content="Load Image" HorizontalAlignment="Left" Margin="707,246,0,0" VerticalAlignment="Top" Width="75" Grid.Row="3" PreviewMouseLeftButtonDown="LoadLocalImages" Height="22" />
+        <Button Name="ButtonCreateAlbum" Content="Create Album" HorizontalAlignment="Left" Margin="688,5,0,0" VerticalAlignment="Top" Width="94" RenderTransformOrigin="-0.227,-0.136" PreviewMouseLeftButtonDown="CreateAlbum" Grid.Row="1" Height="22" Grid.RowSpan="2"/>
+        <TextBox Name="TextBoxAlbum" HorizontalAlignment="Left" Height="23" Margin="549,4,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged_1" Grid.RowSpan="2"/>
+        <Button Name="Back" Content="Back" HorizontalAlignment="Left" Height="21" Margin="688,42,0,0" Grid.Row="2" VerticalAlignment="Top" Width="94" PreviewMouseLeftButtonDown="BackEvent"/>
     </Grid>
-    
+
 </Window> 
