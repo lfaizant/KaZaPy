@@ -9,183 +9,47 @@
 //------------------------------------------------------------------------------
 
 namespace WPFClient.UserService {
-    using System.Runtime.Serialization;
-    using System;
     
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/ObjectClass")]
-    [System.SerializableAttribute()]
-    public partial class User : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        private string emailField;
-        
-        private string firstNameField;
-        
-        private int idField;
-        
-        private string lastNameField;
-        
-        private bool loggedField;
-        
-        private string passwordField;
-        
-        private bool privilegeField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public string email {
-            get {
-                return this.emailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.emailField, value) != true)) {
-                    this.emailField = value;
-                    this.RaisePropertyChanged("email");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public string firstName {
-            get {
-                return this.firstNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.firstNameField, value) != true)) {
-                    this.firstNameField = value;
-                    this.RaisePropertyChanged("firstName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public int id {
-            get {
-                return this.idField;
-            }
-            set {
-                if ((this.idField.Equals(value) != true)) {
-                    this.idField = value;
-                    this.RaisePropertyChanged("id");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public string lastName {
-            get {
-                return this.lastNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.lastNameField, value) != true)) {
-                    this.lastNameField = value;
-                    this.RaisePropertyChanged("lastName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public bool logged {
-            get {
-                return this.loggedField;
-            }
-            set {
-                if ((this.loggedField.Equals(value) != true)) {
-                    this.loggedField = value;
-                    this.RaisePropertyChanged("logged");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public string password {
-            get {
-                return this.passwordField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.passwordField, value) != true)) {
-                    this.passwordField = value;
-                    this.RaisePropertyChanged("password");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public bool privilege {
-            get {
-                return this.privilegeField;
-            }
-            set {
-                if ((this.privilegeField.Equals(value) != true)) {
-                    this.privilegeField = value;
-                    this.RaisePropertyChanged("privilege");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserService.IUserService")]
     public interface IUserService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/GetUserById", ReplyAction="http://tempuri.org/IUserService/GetUserByIdResponse")]
-        WPFClient.UserService.User GetUserById(int userId);
+        ObjectClass.User GetUserById(int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/GetUserById", ReplyAction="http://tempuri.org/IUserService/GetUserByIdResponse")]
-        System.Threading.Tasks.Task<WPFClient.UserService.User> GetUserByIdAsync(int userId);
+        System.Threading.Tasks.Task<ObjectClass.User> GetUserByIdAsync(int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/GetUserByEmail", ReplyAction="http://tempuri.org/IUserService/GetUserByEmailResponse")]
-        WPFClient.UserService.User GetUserByEmail(string email);
+        ObjectClass.User GetUserByEmail(string email);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/GetUserByEmail", ReplyAction="http://tempuri.org/IUserService/GetUserByEmailResponse")]
-        System.Threading.Tasks.Task<WPFClient.UserService.User> GetUserByEmailAsync(string email);
+        System.Threading.Tasks.Task<ObjectClass.User> GetUserByEmailAsync(string email);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/AddUser", ReplyAction="http://tempuri.org/IUserService/AddUserResponse")]
-        void AddUser(WPFClient.UserService.User user);
+        void AddUser(ObjectClass.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/AddUser", ReplyAction="http://tempuri.org/IUserService/AddUserResponse")]
-        System.Threading.Tasks.Task AddUserAsync(WPFClient.UserService.User user);
+        System.Threading.Tasks.Task AddUserAsync(ObjectClass.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/DeleteUser", ReplyAction="http://tempuri.org/IUserService/DeleteUserResponse")]
-        void DeleteUser(WPFClient.UserService.User user);
+        void DeleteUser(ObjectClass.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/DeleteUser", ReplyAction="http://tempuri.org/IUserService/DeleteUserResponse")]
-        System.Threading.Tasks.Task DeleteUserAsync(WPFClient.UserService.User user);
+        System.Threading.Tasks.Task DeleteUserAsync(ObjectClass.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/LogInUser", ReplyAction="http://tempuri.org/IUserService/LogInUserResponse")]
-        void LogInUser(WPFClient.UserService.User user);
+        void LogInUser(ObjectClass.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/LogInUser", ReplyAction="http://tempuri.org/IUserService/LogInUserResponse")]
-        System.Threading.Tasks.Task LogInUserAsync(WPFClient.UserService.User user);
+        System.Threading.Tasks.Task LogInUserAsync(ObjectClass.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/LogOutUser", ReplyAction="http://tempuri.org/IUserService/LogOutUserResponse")]
-        void LogOutUser(WPFClient.UserService.User user);
+        void LogOutUser(ObjectClass.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/LogOutUser", ReplyAction="http://tempuri.org/IUserService/LogOutUserResponse")]
-        System.Threading.Tasks.Task LogOutUserAsync(WPFClient.UserService.User user);
+        System.Threading.Tasks.Task LogOutUserAsync(ObjectClass.User user);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -215,51 +79,51 @@ namespace WPFClient.UserService {
                 base(binding, remoteAddress) {
         }
         
-        public WPFClient.UserService.User GetUserById(int userId) {
+        public ObjectClass.User GetUserById(int userId) {
             return base.Channel.GetUserById(userId);
         }
         
-        public System.Threading.Tasks.Task<WPFClient.UserService.User> GetUserByIdAsync(int userId) {
+        public System.Threading.Tasks.Task<ObjectClass.User> GetUserByIdAsync(int userId) {
             return base.Channel.GetUserByIdAsync(userId);
         }
         
-        public WPFClient.UserService.User GetUserByEmail(string email) {
+        public ObjectClass.User GetUserByEmail(string email) {
             return base.Channel.GetUserByEmail(email);
         }
         
-        public System.Threading.Tasks.Task<WPFClient.UserService.User> GetUserByEmailAsync(string email) {
+        public System.Threading.Tasks.Task<ObjectClass.User> GetUserByEmailAsync(string email) {
             return base.Channel.GetUserByEmailAsync(email);
         }
         
-        public void AddUser(WPFClient.UserService.User user) {
+        public void AddUser(ObjectClass.User user) {
             base.Channel.AddUser(user);
         }
         
-        public System.Threading.Tasks.Task AddUserAsync(WPFClient.UserService.User user) {
+        public System.Threading.Tasks.Task AddUserAsync(ObjectClass.User user) {
             return base.Channel.AddUserAsync(user);
         }
         
-        public void DeleteUser(WPFClient.UserService.User user) {
+        public void DeleteUser(ObjectClass.User user) {
             base.Channel.DeleteUser(user);
         }
         
-        public System.Threading.Tasks.Task DeleteUserAsync(WPFClient.UserService.User user) {
+        public System.Threading.Tasks.Task DeleteUserAsync(ObjectClass.User user) {
             return base.Channel.DeleteUserAsync(user);
         }
         
-        public void LogInUser(WPFClient.UserService.User user) {
+        public void LogInUser(ObjectClass.User user) {
             base.Channel.LogInUser(user);
         }
         
-        public System.Threading.Tasks.Task LogInUserAsync(WPFClient.UserService.User user) {
+        public System.Threading.Tasks.Task LogInUserAsync(ObjectClass.User user) {
             return base.Channel.LogInUserAsync(user);
         }
         
-        public void LogOutUser(WPFClient.UserService.User user) {
+        public void LogOutUser(ObjectClass.User user) {
             base.Channel.LogOutUser(user);
         }
         
-        public System.Threading.Tasks.Task LogOutUserAsync(WPFClient.UserService.User user) {
+        public System.Threading.Tasks.Task LogOutUserAsync(ObjectClass.User user) {
             return base.Channel.LogOutUserAsync(user);
         }
     }

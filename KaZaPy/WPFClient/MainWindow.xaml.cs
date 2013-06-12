@@ -50,18 +50,6 @@ namespace WPFClient
             imageSource2.ObjectInstance = imageCollection2; 
         }
 
-        // On initie le Drag and Drop 
-        /*private void ImageDragEvent(object sender, MouseButtonEventArgs e)
-        {
-            ListBox parent = (ListBox)sender;
-            dragSource = parent;
-            object data = GetDataFromListBox(dragSource, e.GetPosition(parent));
-            if (data != null)
-            {
-                DragDrop.DoDragDrop(parent, data, DragDropEffects.Move);
-            }
-        }*/
-
         Point startpoint;
         private void StartDrag(object sender, MouseButtonEventArgs e)
         {
@@ -151,8 +139,7 @@ namespace WPFClient
         {
             // Get user id
 
-            // Get album from the user
-            // List<Album> listAl = DBAccess.GetAlbumsByUser(    );            
+            // Get album from the user           
             AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
             Album[] listAl = asc.GetAllAlbums();
             foreach (Album a in listAl)
@@ -170,7 +157,8 @@ namespace WPFClient
         {
             imageCollection1 = new ImageCollection();
 
-            Album a = DBAccess.GetAlbumById(id);
+            AlbumService.AlbumServiceClient asc = new AlbumService.AlbumServiceClient();
+            Album a = asc.GetAlbumById(id);
             List<ObjectClass.Image> lia = a.Images;
 
             foreach(ObjectClass.Image img in lia)
@@ -212,7 +200,12 @@ namespace WPFClient
 
         private void uploadImage(int IdAlbum, byte[] image)
         {
-            DBAccess.AddImage(new ObjectClass.Image(image, IdAlbum));
+            //DBAccess.AddImage(new ObjectClass.Image(image, IdAlbum));
+            MemoryStream imageMemoryStream = new MemoryStream(image);
+            ImageService.ImageServiceClient isc = new ImageService.ImageServiceClient();
+            ImageService.ImageInfo imageInfo = new ImageService.ImageInfo();
+            imageInfo.Album = IdAlbum;
+            isc.AddImage(imageInfo, imageMemoryStream);
         }
 
         private void ImageUploadEvent(object sender, DragEventArgs e)
@@ -255,13 +248,18 @@ namespace WPFClient
         {
             if (Key.Delete == k.Key)
             {
-                string albumName;
-                string value = "Album name";
-                /*if (InputBox("New document", "New document name:", ref value) == System.Windows.Forms.DialogResult.OK)
-                {
-                    albumName = value;
-                }*/
+
             }
+        }
+
+        private void CreateAlbum(object sender, MouseButtonEventArgs e)
+        {
+            string albumName;
+            string value = "Album name";
+            /*if (InputBox("New document", "New document name:", ref value) == System.Windows.Forms.DialogResult.OK)
+            {
+                albumName = value;
+            }*/
         }
     }
 }

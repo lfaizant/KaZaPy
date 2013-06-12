@@ -106,6 +106,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Properties\DataSources\ObjectClass.Album.datasource" />
+    <None Include="Properties\DataSources\ObjectClass.User.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -120,9 +122,6 @@
     </None>
     <None Include="Service References\AlbumService\AlbumService2.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\AlbumService\WPFClient.AlbumService.Album.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\ImageService\ImageService.wsdl" />
     <None Include="Service References\ImageService\ImageService.xsd">
@@ -155,9 +154,6 @@
     </None>
     <None Include="Service References\UserService\UserService2.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\UserService\WPFClient.UserService.User.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
